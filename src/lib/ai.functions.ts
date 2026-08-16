@@ -14,6 +14,8 @@ const ideaSchema = z.object({
   audience: z.string(),
   goal: z.string(),
   format: z.string(),
+  thoughts: z.string().optional(),
+  tone: z.string().optional(),
 });
 
 export const ideasFn = createServerFn({ method: "POST" })
@@ -27,6 +29,10 @@ const scriptSchema = z.object({
   format: z.string(),
   platform: z.string(),
   audience: z.string(),
+  niche: z.string().optional(),
+  goal: z.string().optional(),
+  thoughts: z.string().optional(),
+  tone: z.string().optional(),
 });
 
 export const scriptFn = createServerFn({ method: "POST" })
