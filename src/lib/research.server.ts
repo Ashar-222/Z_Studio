@@ -6,7 +6,7 @@ export interface Source {
   url: string;
   title: string;
   snippet: string;
-  markdown?: string;
+  markdown?: string | undefined;
 }
 
 function keys() {
@@ -36,7 +36,7 @@ async function call<T>(path: string, body: unknown): Promise<T> {
 }
 
 type ScrapeDoc = {
-  markdown?: string;
+  markdown?: string | undefined;
   summary?: string;
   metadata?: { title?: string; description?: string; sourceURL?: string };
 };
@@ -68,7 +68,7 @@ export async function searchWeb(query: string, limit = 5): Promise<Source[]> {
     url?: string;
     title?: string;
     description?: string;
-    markdown?: string;
+    markdown?: string | undefined;
   }[]).map((r) => ({
     url: r.url ?? "",
     title: r.title ?? r.url ?? "Untitled",
