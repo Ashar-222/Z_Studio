@@ -1,7 +1,7 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
-import { Btn, Field, Input, Panel, SectionTitle, Select, Tag } from "@/components/brutal";
+import { Btn, Field, Input, Panel, SectionTitle, Select, Tag, Textarea } from "@/components/brutal";
 import { ideasFn, scriptFn } from "@/lib/ai.functions";
 import { useStore, uid } from "@/lib/store";
 import { FORMATS, GOALS, PLATFORMS, type ContentFormat, type Platform } from "@/lib/types";
@@ -41,12 +41,23 @@ function Ideas() {
   const profile = state.profile;
 
   const [topic, setTopic] = useState("");
+  const [thoughts, setThoughts] = useState("");
+  const [tone, setTone] = useState("");
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [platform, setPlatform] = useState<Platform>(profile?.platforms[0] ?? "YouTube");
   const [format, setFormat] = useState<ContentFormat>(profile?.contentType ?? "Short");
   const [goal, setGoal] = useState<string>(profile?.goal ?? GOALS[0]);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<Idea[]>([]);
+
+  const contextLine = [
+    `${platform} ${format}`,
+    profile?.niche,
+    profile?.audience,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   async function generate() {
     setLoading(true);
@@ -59,6 +70,8 @@ function Ideas() {
           audience: profile?.audience ?? "",
           goal,
           format,
+          thoughts,
+          tone,
         },
       });
       setMode(res.mode);
@@ -101,6 +114,10 @@ function Ideas() {
           format,
           platform,
           audience: profile?.audience ?? "",
+          niche: profile?.niche ?? "",
+          goal,
+          thoughts,
+          tone,
         },
       });
       updateItem(item.id, {
@@ -130,39 +147,83 @@ function Ideas() {
 
       <div className="grid gap-8 lg:grid-cols-12">
         <Panel thick className="animate-slide-up space-y-4 p-6 lg:col-span-4">
-          <Field label="Topic / angle seed">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-dashed border-foreground pb-3">
+            <span className="text-[10px] font-bold uppercase tracking-widest">
+              {contextLine}
+            </span>
+            <Link
+              to="/welcome"
+              className="text-[10px] font-bold uppercase tracking-widest underline underline-offset-4"
+            >
+              Edit profile
+            </Link>
+          </div>
+
+          <Field label="Topic / idea">
             <Input
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
-              placeholder="Editing workflow for solo creators"
+              placeholder="What do you want to make?"
             />
           </Field>
-          <Field label="Platform">
-            <Select value={platform} onChange={(e) => setPlatform(e.target.value as Platform)}>
-              {PLATFORMS.map((p) => (
-                <option key={p}>{p}</option>
-              ))}
-            </Select>
+
+          <Field label="Your thoughts (optional)">
+            <Textarea
+              rows={7}
+              value={thoughts}
+              onChange={(e) => setThoughts(e.target.value)}
+              placeholder="Your own points, opinions, examples, rough notes… the AI builds on these instead of inventing its own concept."
+            />
           </Field>
-          <Field label="Format">
-            <Select value={format} onChange={(e) => setFormat(e.target.value as ContentFormat)}>
-              {FORMATS.map((f) => (
-                <option key={f}>{f}</option>
-              ))}
-            </Select>
-          </Field>
-          <Field label="Goal">
-            <Select value={goal} onChange={(e) => setGoal(e.target.value)}>
-              {GOALS.map((g) => (
-                <option key={g}>{g}</option>
-              ))}
-            </Select>
-          </Field>
-          <div className="border-t-2 border-dashed border-foreground pt-4 text-[10px] uppercase leading-relaxed text-muted-foreground">
-            Audience: {profile?.audience || "not set"} // Niche: {profile?.niche || "not set"}
-          </div>
-          <Btn variant="primary" className="w-full py-3" onClick={generate} disabled={loading}>
-            {loading ? "Forging…" : "Generate ideas"}
+
+          <button
+            type="button"
+            onClick={() => setShowAdvanced((v) => !v)}
+            className="text-[10px] font-bold uppercase tracking-widest underline underline-offset-4"
+          >
+            {showAdvanced ? "Hide options" : "Optional controls"}
+          </button>
+
+          {showAdvanced && (
+            <div className="animate-slide-up space-y-4 border-2 border-dashed border-foreground p-4">
+              <Field label="Tone / style">
+                <Input
+                  value={tone}
+                  onChange={(e) => setTone(e.target.value)}
+                  placeholder="Blunt, funny, technical…"
+                />
+              </Field>
+              <Field label="Platform">
+                <Select value={platform} onChange={(e) => setPlatform(e.target.value as Platform)}>
+                  {PLATFORMS.map((p) => (
+                    <option key={p}>{p}</option>
+                  ))}
+                </Select>
+              </Field>
+              <Field label="Format">
+                <Select value={format} onChange={(e) => setFormat(e.target.value as ContentFormat)}>
+                  {FORMATS.map((f) => (
+                    <option key={f}>{f}</option>
+                  ))}
+                </Select>
+              </Field>
+              <Field label="Goal">
+                <Select value={goal} onChange={(e) => setGoal(e.target.value)}>
+                  {GOALS.map((g) => (
+                    <option key={g}>{g}</option>
+                  ))}
+                </Select>
+              </Field>
+            </div>
+          )}
+
+          <Btn
+            variant="primary"
+            className="w-full py-3"
+            onClick={generate}
+            disabled={loading || (!topic.trim() && !thoughts.trim())}
+          >
+            {loading ? "Forging…" : thoughts.trim() ? "Develop my idea" : "Generate ideas"}
           </Btn>
         </Panel>
 
