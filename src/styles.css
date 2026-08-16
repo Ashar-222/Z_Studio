@@ -4,6 +4,68 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --font-display: "Anton", ui-sans-serif, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, monospace;
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+@utility hard-shadow {
+  box-shadow: 6px 6px 0px 0px var(--color-foreground);
+}
+
+@utility hard-shadow-sm {
+  box-shadow: 3px 3px 0px 0px var(--color-foreground);
+}
+
+@utility hard-shadow-hover {
+  transition:
+    transform 0.15s var(--ease-out-expo),
+    box-shadow 0.15s var(--ease-out-expo);
+  &:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0px 0px var(--color-foreground);
+  }
+}
+
+@utility press {
+  transition:
+    transform 0.12s var(--ease-out-expo),
+    box-shadow 0.12s var(--ease-out-expo);
+  &:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 0 var(--color-foreground);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@utility animate-slide-up {
+  animation: slideUp 0.5s var(--ease-out-expo) both;
+}
+
+@keyframes marqueeX {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility marquee-track {
+  animation: marqueeX 28s linear infinite;
+}
+
 /*
  * Design system definition.
  *
@@ -62,26 +124,28 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0rem;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --foreground: oklch(0 0 0);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
+  --card-foreground: oklch(0 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0 0 0);
+  /* safety yellow #fbff00 */
+  --primary: oklch(0.9705 0.2109 110.36);
+  --primary-foreground: oklch(0 0 0);
+  /* electric blue #0000ff */
+  --secondary: oklch(0.4534 0.3122 264.05);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.9219 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.9705 0.2109 110.36);
+  --accent-foreground: oklch(0 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0 0 0);
+  --input: oklch(0 0 0);
+  --ring: oklch(0.4534 0.3122 264.05);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -140,5 +204,11 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-mono);
+  }
+
+  ::selection {
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-foreground);
   }
 }
