@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IdeasRouteImport } from './routes/ideas'
+import { Route as IntelRouteImport } from './routes/intel'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as ResearchRouteImport } from './routes/research'
@@ -32,6 +33,11 @@ const AuthRoute = AuthRouteImport.update({
 const IdeasRoute = IdeasRouteImport.update({
   id: '/ideas',
   path: '/ideas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntelRoute = IntelRouteImport.update({
+  id: '/intel',
+  path: '/intel',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LibraryRoute = LibraryRouteImport.update({
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/ideas': typeof IdeasRoute
+  '/intel': typeof IntelRoute
   '/library': typeof LibraryRoute
   '/planner': typeof PlannerRoute
   '/research': typeof ResearchRoute
@@ -80,6 +87,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/ideas': typeof IdeasRoute
+  '/intel': typeof IntelRoute
   '/library': typeof LibraryRoute
   '/planner': typeof PlannerRoute
   '/research': typeof ResearchRoute
@@ -92,6 +100,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/ideas': typeof IdeasRoute
+  '/intel': typeof IntelRoute
   '/library': typeof LibraryRoute
   '/planner': typeof PlannerRoute
   '/research': typeof ResearchRoute
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/ideas'
+    | '/intel'
     | '/library'
     | '/planner'
     | '/research'
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/ideas'
+    | '/intel'
     | '/library'
     | '/planner'
     | '/research'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/ideas'
+    | '/intel'
     | '/library'
     | '/planner'
     | '/research'
@@ -139,6 +151,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   IdeasRoute: typeof IdeasRoute
+  IntelRoute: typeof IntelRoute
   LibraryRoute: typeof LibraryRoute
   PlannerRoute: typeof PlannerRoute
   ResearchRoute: typeof ResearchRoute
@@ -168,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/ideas'
       fullPath: '/ideas'
       preLoaderRoute: typeof IdeasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intel': {
+      id: '/intel'
+      path: '/intel'
+      fullPath: '/intel'
+      preLoaderRoute: typeof IntelRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/library': {
@@ -219,6 +239,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   IdeasRoute: IdeasRoute,
+  IntelRoute: IntelRoute,
   LibraryRoute: LibraryRoute,
   PlannerRoute: PlannerRoute,
   ResearchRoute: ResearchRoute,
