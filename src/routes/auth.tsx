@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Btn, Field, Input, Panel } from "@/components/brutal";
+import { Btn, Field, Panel } from "@/components/brutal";
+import { PasswordInput } from "@/components/PasswordInput";
 import { supabase } from "@/integrations/supabase/client";
 import { useStore } from "@/lib/store";
 
