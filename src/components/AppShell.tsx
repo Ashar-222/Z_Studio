@@ -71,6 +71,12 @@ export function AppShell({
             Calendar
           </Link>
           <Link
+            to="/research"
+            className="hidden text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground lg:block"
+          >
+            Research
+          </Link>
+          <Link
             to="/library"
             className="hidden text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground lg:block"
           >

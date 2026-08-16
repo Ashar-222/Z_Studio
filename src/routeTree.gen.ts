@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IdeasRouteImport } from './routes/ideas'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as PlannerRouteImport } from './routes/planner'
+import { Route as ResearchRouteImport } from './routes/research'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as PackIdRouteImport } from './routes/pack.$id'
 import { Route as ScriptIdRouteImport } from './routes/script.$id'
@@ -43,6 +44,11 @@ const PlannerRoute = PlannerRouteImport.update({
   path: '/planner',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResearchRoute = ResearchRouteImport.update({
+  id: '/research',
+  path: '/research',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WelcomeRoute = WelcomeRouteImport.update({
   id: '/welcome',
   path: '/welcome',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/ideas': typeof IdeasRoute
   '/library': typeof LibraryRoute
   '/planner': typeof PlannerRoute
+  '/research': typeof ResearchRoute
   '/welcome': typeof WelcomeRoute
   '/pack/$id': typeof PackIdRoute
   '/script/$id': typeof ScriptIdRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/ideas': typeof IdeasRoute
   '/library': typeof LibraryRoute
   '/planner': typeof PlannerRoute
+  '/research': typeof ResearchRoute
   '/welcome': typeof WelcomeRoute
   '/pack/$id': typeof PackIdRoute
   '/script/$id': typeof ScriptIdRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/ideas': typeof IdeasRoute
   '/library': typeof LibraryRoute
   '/planner': typeof PlannerRoute
+  '/research': typeof ResearchRoute
   '/welcome': typeof WelcomeRoute
   '/pack/$id': typeof PackIdRoute
   '/script/$id': typeof ScriptIdRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/ideas'
     | '/library'
     | '/planner'
+    | '/research'
     | '/welcome'
     | '/pack/$id'
     | '/script/$id'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/ideas'
     | '/library'
     | '/planner'
+    | '/research'
     | '/welcome'
     | '/pack/$id'
     | '/script/$id'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/ideas'
     | '/library'
     | '/planner'
+    | '/research'
     | '/welcome'
     | '/pack/$id'
     | '/script/$id'
@@ -129,6 +141,7 @@ export interface RootRouteChildren {
   IdeasRoute: typeof IdeasRoute
   LibraryRoute: typeof LibraryRoute
   PlannerRoute: typeof PlannerRoute
+  ResearchRoute: typeof ResearchRoute
   WelcomeRoute: typeof WelcomeRoute
   PackIdRoute: typeof PackIdRoute
   ScriptIdRoute: typeof ScriptIdRoute
@@ -171,6 +184,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlannerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/research': {
+      id: '/research'
+      path: '/research'
+      fullPath: '/research'
+      preLoaderRoute: typeof ResearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/welcome': {
       id: '/welcome'
       path: '/welcome'
@@ -201,6 +221,7 @@ const rootRouteChildren: RootRouteChildren = {
   IdeasRoute: IdeasRoute,
   LibraryRoute: LibraryRoute,
   PlannerRoute: PlannerRoute,
+  ResearchRoute: ResearchRoute,
   WelcomeRoute: WelcomeRoute,
   PackIdRoute: PackIdRoute,
   ScriptIdRoute: ScriptIdRoute,
