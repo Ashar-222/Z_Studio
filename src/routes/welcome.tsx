@@ -202,38 +202,80 @@ function Welcome() {
             <div className="animate-slide-up space-y-4">
               <div className="border-2 border-foreground bg-muted p-3">
                 <span className="text-[10px] font-bold uppercase tracking-widest">
-                  Import from your socials
+                  {social ? "Connect this platform" : "Choose one platform to connect"}
                 </span>
-                <div className="mt-2 flex gap-1">
-                  {SOCIALS.map((s) => (
-                    <button
-                      key={s.id}
-                      type="button"
-                      onClick={() => setSocial(s.id)}
-                      className={cn(
-                        "press flex-1 border-2 border-foreground px-2 py-1 text-[10px] font-bold uppercase",
-                        social === s.id ? "bg-foreground text-background" : "bg-background",
-                      )}
-                    >
-                      {s.label}
-                    </button>
-                  ))}
-                </div>
-                <div className="mt-2 flex gap-2">
-                  <Input
-                    value={handle}
-                    onChange={(e) => setHandle(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && void doImport()}
-                    placeholder="@yourhandle"
-                  />
-                  <Btn variant="primary" onClick={() => void doImport()} disabled={importing || !handle.trim()}>
-                    {importing ? (
-                      <Loader2 className="size-4 animate-spin" />
-                    ) : (
-                      <Sparkles className="size-4" />
-                    )}
-                  </Btn>
-                </div>
+                {!social ? (
+                  <div className="mt-2 grid gap-1 sm:grid-cols-2">
+                    {SOCIALS.map((s) => (
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={() => {
+                          setSocial(s);
+                          setHandle("");
+                          setImported(null);
+                          setImportError(null);
+                        }}
+                        className="press border-2 border-foreground bg-background px-2 py-2 text-left"
+                      >
+                        <div className="text-[11px] font-bold uppercase">{s.label}</div>
+                        <div className="text-[10px] text-muted-foreground">{s.hint}</div>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <>
+                    <div className="mt-2 flex items-center justify-between gap-2 border-2 border-foreground bg-foreground px-2 py-1 text-background">
+                      <span className="text-[10px] font-bold uppercase tracking-widest">
+                        {social.label}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSocial(null);
+                          setHandle("");
+                          setImported(null);
+                          setImportError(null);
+                        }}
+                        className="text-[10px] font-bold uppercase underline"
+                      >
+                        Change
+                      </button>
+                    </div>
+                    <p className="mt-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                      {social.label} username
+                    </p>
+                    <div className="mt-1 flex gap-2">
+                      <div className="flex min-w-0 flex-1 items-center border-2 border-foreground bg-background">
+                        <span className="shrink-0 border-r-2 border-foreground px-2 py-1 text-[10px] font-bold uppercase text-muted-foreground">
+                          {social.prefix}
+                        </span>
+                        <input
+                          value={handle}
+                          onChange={(e) => setHandle(e.target.value)}
+                          onKeyDown={(e) => e.key === "Enter" && void doImport()}
+                          placeholder={social.placeholder}
+                          aria-label={`${social.label} username`}
+                          className="w-full min-w-0 bg-transparent px-2 py-1.5 font-mono text-sm outline-none"
+                        />
+                      </div>
+                      <Btn
+                        variant="primary"
+                        onClick={() => void doImport()}
+                        disabled={importing || !handle.trim()}
+                      >
+                        {importing ? (
+                          <Loader2 className="size-4 animate-spin" />
+                        ) : (
+                          <Sparkles className="size-4" />
+                        )}
+                      </Btn>
+                    </div>
+                    <p className="mt-1 text-[10px] text-muted-foreground">
+                      One platform at a time — you can connect another later.
+                    </p>
+                  </>
+                )}
                 {importError && (
                   <p className="mt-2 text-[10px] font-bold uppercase text-destructive">{importError}</p>
                 )}
