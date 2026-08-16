@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { importSocialProfile } from "./social.server";
 
 const schema = z.object({
@@ -10,3 +11,85 @@ const schema = z.object({
 export const importSocialFn = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => schema.parse(d))
   .handler(async ({ data }) => importSocialProfile(data));
+
+/** Fetch from SocialFetch, then persist the normalized result for the signed-in creator. */
+export const syncSocialFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => schema.parse(d))
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const profile = await importSocialProfile(data);
+
+    const { data: accountRow, error: accErr } = await supabase
+      .from("social_accounts")
+      .upsert(
+        {
+          user_id: userId,
+          platform: profile.platform,
+          handle: profile.handle,
+          display_name: profile.displayName,
+          bio: profile.bio,
+          avatar_url: profile.avatarUrl ?? null,
+          profile_url: profile.profileUrl ?? null,
+          verified: profile.verified,
+          followers: profile.metrics.followers ?? null,
+          posts_count: profile.metrics.posts ?? null,
+          total_views: profile.metrics.views ?? null,
+          raw: { suggested: profile.suggested },
+          last_synced_at: new Date().toISOString(),
+        },
+        { onConflict: "user_id,platform,handle" },
+      )
+      .select()
+      .single();
+    if (accErr || !accountRow) throw new Error(`Could not save profile: ${accErr?.message ?? "unknown error"}`);
+
+    const posts = profile.topPosts.filter((p) => p.externalId);
+    if (posts.length > 0) {
+      const { error: postErr } = await supabase.from("social_posts").upsert(
+        posts.map((p) => ({
+          user_id: userId,
+          account_id: accountRow.id,
+          external_id: p.externalId,
+          title: p.title,
+          url: p.url ?? null,
+          thumbnail_url: p.thumbnailUrl ?? null,
+          published_at: p.publishedAt ?? null,
+          views: p.views ?? null,
+          likes: p.likes ?? null,
+          comments: p.comments ?? null,
+          shares: p.shares ?? null,
+          duration_seconds: p.durationSeconds ?? null,
+        })),
+        { onConflict: "account_id,external_id" },
+      );
+      if (postErr) throw new Error(`Could not save posts: ${postErr.message}`);
+    }
+
+    return { profile, accountId: accountRow.id as string, lastSyncedAt: accountRow.last_synced_at as string };
+  });
+
+/** Load previously imported accounts + posts from the database. */
+export const listSocialFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const { data: accounts, error } = await supabase
+      .from("social_accounts")
+      .select("*")
+      .eq("user_id", userId)
+      .order("last_synced_at", { ascending: false });
+    if (error) throw new Error(error.message);
+    const ids = (accounts ?? []).map((a) => a.id);
+    let posts: Record<string, unknown>[] = [];
+    if (ids.length > 0) {
+      const { data: postRows, error: pErr } = await supabase
+        .from("social_posts")
+        .select("*")
+        .in("account_id", ids)
+        .order("views", { ascending: false, nullsFirst: false });
+      if (pErr) throw new Error(pErr.message);
+      posts = (postRows ?? []) as unknown as Record<string, unknown>[];
+    }
+    return { accounts: (accounts ?? []) as unknown as Record<string, unknown>[], posts };
+  });
