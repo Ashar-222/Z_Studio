@@ -6,6 +6,7 @@ import { importSocialProfile } from "./social.server";
 const schema = z.object({
   platform: z.enum(["youtube", "instagram", "tiktok"]),
   handle: z.string().min(1).max(120),
+  kind: z.enum(["videos", "shorts"]).optional(),
 });
 
 export const importSocialFn = createServerFn({ method: "POST" })

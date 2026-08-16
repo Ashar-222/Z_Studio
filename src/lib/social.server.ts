@@ -19,6 +19,7 @@ export interface SocialPost {
 
 export interface SocialProfile {
   platform: SocialPlatform;
+  kind?: "videos" | "shorts" | undefined;
   handle: string;
   displayName: string;
   bio: string;
@@ -86,6 +87,7 @@ Recent titles: ${posts.slice(0, 6).map((p) => p.title).join(" | ")}`,
 export async function importSocialProfile(input: {
   platform: SocialPlatform;
   handle: string;
+  kind?: "videos" | "shorts" | undefined;
 }): Promise<SocialProfile> {
   const handle = clean(input.handle);
   if (!handle) throw new Error("Enter a username");
@@ -120,6 +122,13 @@ export async function importSocialProfile(input: {
       console.error("youtube videos failed", e);
     }
     metrics = { followers: metrics["subscribers"], posts: metrics["videos"], views: metrics["views"] };
+    if (input.kind === "shorts" || input.kind === "videos") {
+      const isShort = (p: SocialPost) =>
+        (p.durationSeconds !== undefined && p.durationSeconds <= 60) ||
+        (p.url ?? "").includes("/shorts/");
+      const filtered = topPosts.filter((p) => (input.kind === "shorts" ? isShort(p) : !isShort(p)));
+      if (filtered.length > 0) topPosts = filtered;
+    }
   } else if (input.platform === "instagram") {
     const r = await get<Envelope>(`/v1/instagram/profiles/${encodeURIComponent(handle)}`);
     const d = r.data ?? {};
@@ -169,8 +178,13 @@ export async function importSocialProfile(input: {
 
   const displayName = str(core["displayName"], handle);
   const bio = str(core["bio"]);
+  const suggested = await suggest(bio, displayName, input.platform, topPosts);
+  if (input.platform === "youtube") {
+    suggested.contentType = input.kind === "shorts" ? "Short" : "Long-form video";
+  }
   return {
     platform: input.platform,
+    kind: input.kind,
     handle,
     displayName,
     bio,
@@ -183,6 +197,6 @@ export async function importSocialProfile(input: {
       views: num(metrics["views"]) ?? num(metrics["likes"]),
     },
     topPosts,
-    suggested: await suggest(bio, displayName, input.platform, topPosts),
+    suggested,
   };
 }

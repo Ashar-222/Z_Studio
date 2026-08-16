@@ -37,10 +37,56 @@ export const Route = createFileRoute("/welcome")({
 
 const FREQUENCIES = ["Daily", "3x per week", "Weekly", "Bi-weekly"];
 
-const SOCIALS: { id: SocialPlatform; label: string; platform: Platform }[] = [
-  { id: "youtube", label: "YouTube", platform: "YouTube" },
-  { id: "instagram", label: "Instagram", platform: "Instagram" },
-  { id: "tiktok", label: "TikTok", platform: "TikTok" },
+type Connection = {
+  id: string;
+  label: string;
+  api: SocialPlatform;
+  kind?: "videos" | "shorts";
+  platform: Platform;
+  hint: string;
+  prefix: string;
+  placeholder: string;
+};
+
+const SOCIALS: Connection[] = [
+  {
+    id: "youtube-videos",
+    label: "YouTube Videos",
+    api: "youtube",
+    kind: "videos",
+    platform: "YouTube",
+    hint: "Long-form uploads from your channel",
+    prefix: "youtube.com/@",
+    placeholder: "mkbhd",
+  },
+  {
+    id: "youtube-shorts",
+    label: "YouTube Shorts",
+    api: "youtube",
+    kind: "shorts",
+    platform: "YouTube",
+    hint: "Vertical shorts from your channel",
+    prefix: "youtube.com/@",
+    placeholder: "mkbhd",
+  },
+  {
+    id: "instagram",
+    label: "Instagram",
+    api: "instagram",
+    platform: "Instagram",
+    hint: "Reels, carousels and posts",
+    prefix: "instagram.com/",
+    placeholder: "natgeo",
+  },
+  {
+    id: "tiktok",
+    label: "TikTok",
+    api: "tiktok",
+    platform: "TikTok",
+    hint: "Your TikTok video history",
+    prefix: "tiktok.com/@",
+    placeholder: "khaby.lame",
+  },
 ];
 
 const compact = (n?: number) =>
@@ -57,7 +103,7 @@ function Welcome() {
   const [contentType, setContentType] = useState<ContentFormat>("Short");
   const [frequency, setFrequency] = useState(FREQUENCIES[1]!);
   const [goal, setGoal] = useState<Goal>("Grow audience");
-  const [social, setSocial] = useState<SocialPlatform>("youtube");
+  const [social, setSocial] = useState<Connection | null>(null);
   const [handle, setHandle] = useState("");
   const [importing, setImporting] = useState(false);
   const [importError, setImportError] = useState<string | null>(null);
@@ -65,17 +111,19 @@ function Welcome() {
   const runImport = useServerFn(importSocialFn);
 
   async function doImport() {
-    if (!handle.trim() || importing) return;
+    if (!social || !handle.trim() || importing) return;
     setImporting(true);
     setImportError(null);
     try {
-      const p = (await runImport({ data: { platform: social, handle } })) as SocialProfile;
+      const p = (await runImport({
+        data: { platform: social.api, handle, ...(social.kind ? { kind: social.kind } : {}) },
+      })) as SocialProfile;
       setImported(p);
       setName(p.displayName || p.handle);
       setNiche(p.suggested.niche);
       setAudience(p.suggested.audience);
       setContentType(p.suggested.contentType as ContentFormat);
-      const match = SOCIALS.find((s) => s.id === p.platform)!.platform;
+      const match = social.platform;
       setPlatforms((prev) => (prev.includes(match) ? prev : [...prev, match]));
     } catch (e) {
       setImportError(e instanceof Error ? e.message : "Import failed");
@@ -154,38 +202,80 @@ function Welcome() {
             <div className="animate-slide-up space-y-4">
               <div className="border-2 border-foreground bg-muted p-3">
                 <span className="text-[10px] font-bold uppercase tracking-widest">
-                  Import from your socials
+                  {social ? "Connect this platform" : "Choose one platform to connect"}
                 </span>
-                <div className="mt-2 flex gap-1">
-                  {SOCIALS.map((s) => (
-                    <button
-                      key={s.id}
-                      type="button"
-                      onClick={() => setSocial(s.id)}
-                      className={cn(
-                        "press flex-1 border-2 border-foreground px-2 py-1 text-[10px] font-bold uppercase",
-                        social === s.id ? "bg-foreground text-background" : "bg-background",
-                      )}
-                    >
-                      {s.label}
-                    </button>
-                  ))}
-                </div>
-                <div className="mt-2 flex gap-2">
-                  <Input
-                    value={handle}
-                    onChange={(e) => setHandle(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && void doImport()}
-                    placeholder="@yourhandle"
-                  />
-                  <Btn variant="primary" onClick={() => void doImport()} disabled={importing || !handle.trim()}>
-                    {importing ? (
-                      <Loader2 className="size-4 animate-spin" />
-                    ) : (
-                      <Sparkles className="size-4" />
-                    )}
-                  </Btn>
-                </div>
+                {!social ? (
+                  <div className="mt-2 grid gap-1 sm:grid-cols-2">
+                    {SOCIALS.map((s) => (
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={() => {
+                          setSocial(s);
+                          setHandle("");
+                          setImported(null);
+                          setImportError(null);
+                        }}
+                        className="press border-2 border-foreground bg-background px-2 py-2 text-left"
+                      >
+                        <div className="text-[11px] font-bold uppercase">{s.label}</div>
+                        <div className="text-[10px] text-muted-foreground">{s.hint}</div>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <>
+                    <div className="mt-2 flex items-center justify-between gap-2 border-2 border-foreground bg-foreground px-2 py-1 text-background">
+                      <span className="text-[10px] font-bold uppercase tracking-widest">
+                        {social.label}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSocial(null);
+                          setHandle("");
+                          setImported(null);
+                          setImportError(null);
+                        }}
+                        className="text-[10px] font-bold uppercase underline"
+                      >
+                        Change
+                      </button>
+                    </div>
+                    <p className="mt-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                      {social.label} username
+                    </p>
+                    <div className="mt-1 flex gap-2">
+                      <div className="flex min-w-0 flex-1 items-center border-2 border-foreground bg-background">
+                        <span className="shrink-0 border-r-2 border-foreground px-2 py-1 text-[10px] font-bold uppercase text-muted-foreground">
+                          {social.prefix}
+                        </span>
+                        <input
+                          value={handle}
+                          onChange={(e) => setHandle(e.target.value)}
+                          onKeyDown={(e) => e.key === "Enter" && void doImport()}
+                          placeholder={social.placeholder}
+                          aria-label={`${social.label} username`}
+                          className="w-full min-w-0 bg-transparent px-2 py-1.5 font-mono text-sm outline-none"
+                        />
+                      </div>
+                      <Btn
+                        variant="primary"
+                        onClick={() => void doImport()}
+                        disabled={importing || !handle.trim()}
+                      >
+                        {importing ? (
+                          <Loader2 className="size-4 animate-spin" />
+                        ) : (
+                          <Sparkles className="size-4" />
+                        )}
+                      </Btn>
+                    </div>
+                    <p className="mt-1 text-[10px] text-muted-foreground">
+                      One platform at a time — you can connect another later.
+                    </p>
+                  </>
+                )}
                 {importError && (
                   <p className="mt-2 text-[10px] font-bold uppercase text-destructive">{importError}</p>
                 )}
