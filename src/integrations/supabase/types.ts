@@ -110,6 +110,122 @@ export type Database = {
         }
         Relationships: []
       }
+      social_accounts: {
+        Row: {
+          avatar_url: string | null
+          bio: string
+          created_at: string
+          display_name: string
+          followers: number | null
+          handle: string
+          id: string
+          last_synced_at: string
+          platform: string
+          posts_count: number | null
+          profile_url: string | null
+          raw: Json | null
+          total_views: number | null
+          user_id: string
+          verified: boolean
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string
+          created_at?: string
+          display_name?: string
+          followers?: number | null
+          handle: string
+          id?: string
+          last_synced_at?: string
+          platform: string
+          posts_count?: number | null
+          profile_url?: string | null
+          raw?: Json | null
+          total_views?: number | null
+          user_id: string
+          verified?: boolean
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string
+          created_at?: string
+          display_name?: string
+          followers?: number | null
+          handle?: string
+          id?: string
+          last_synced_at?: string
+          platform?: string
+          posts_count?: number | null
+          profile_url?: string | null
+          raw?: Json | null
+          total_views?: number | null
+          user_id?: string
+          verified?: boolean
+        }
+        Relationships: []
+      }
+      social_posts: {
+        Row: {
+          account_id: string
+          comments: number | null
+          created_at: string
+          duration_seconds: number | null
+          external_id: string
+          id: string
+          likes: number | null
+          published_at: string | null
+          raw: Json | null
+          shares: number | null
+          thumbnail_url: string | null
+          title: string
+          url: string | null
+          user_id: string
+          views: number | null
+        }
+        Insert: {
+          account_id: string
+          comments?: number | null
+          created_at?: string
+          duration_seconds?: number | null
+          external_id: string
+          id?: string
+          likes?: number | null
+          published_at?: string | null
+          raw?: Json | null
+          shares?: number | null
+          thumbnail_url?: string | null
+          title?: string
+          url?: string | null
+          user_id: string
+          views?: number | null
+        }
+        Update: {
+          account_id?: string
+          comments?: number | null
+          created_at?: string
+          duration_seconds?: number | null
+          external_id?: string
+          id?: string
+          likes?: number | null
+          published_at?: string | null
+          raw?: Json | null
+          shares?: number | null
+          thumbnail_url?: string | null
+          title?: string
+          url?: string | null
+          user_id?: string
+          views?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_posts_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "social_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
