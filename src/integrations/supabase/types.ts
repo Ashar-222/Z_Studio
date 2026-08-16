@@ -14,7 +14,102 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      content_items: {
+        Row: {
+          angle: string
+          created_at: string
+          format: string
+          hook: string
+          id: string
+          metrics: Json | null
+          pack: Json | null
+          platform: string
+          publish_date: string | null
+          script: Json | null
+          status: string
+          thumbnail: Json | null
+          title: string
+          updated_at: string
+          user_id: string
+          why: string | null
+        }
+        Insert: {
+          angle?: string
+          created_at?: string
+          format?: string
+          hook?: string
+          id?: string
+          metrics?: Json | null
+          pack?: Json | null
+          platform?: string
+          publish_date?: string | null
+          script?: Json | null
+          status?: string
+          thumbnail?: Json | null
+          title?: string
+          updated_at?: string
+          user_id: string
+          why?: string | null
+        }
+        Update: {
+          angle?: string
+          created_at?: string
+          format?: string
+          hook?: string
+          id?: string
+          metrics?: Json | null
+          pack?: Json | null
+          platform?: string
+          publish_date?: string | null
+          script?: Json | null
+          status?: string
+          thumbnail?: Json | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          why?: string | null
+        }
+        Relationships: []
+      }
+      creator_profiles: {
+        Row: {
+          audience: string
+          content_type: string
+          created_at: string
+          frequency: string
+          goal: string
+          name: string
+          niche: string
+          platforms: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          audience?: string
+          content_type?: string
+          created_at?: string
+          frequency?: string
+          goal?: string
+          name?: string
+          niche?: string
+          platforms?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          audience?: string
+          content_type?: string
+          created_at?: string
+          frequency?: string
+          goal?: string
+          name?: string
+          niche?: string
+          platforms?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

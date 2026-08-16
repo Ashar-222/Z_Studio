@@ -71,12 +71,14 @@ function Welcome() {
 
       <div className="mx-auto grid max-w-6xl gap-10 p-6 lg:grid-cols-2 lg:items-center lg:py-16">
         <div className="animate-slide-up space-y-6">
-          <h1 className="font-display text-6xl uppercase leading-[0.9] md:text-8xl">
+          <h1 className="font-display text-6xl uppercase leading-[1.05] md:text-8xl">
             Your whole
             <br />
             channel,
             <br />
-            <span className="bg-secondary px-2 text-secondary-foreground">one desk.</span>
+            <span className="box-decoration-clone bg-secondary px-2 text-secondary-foreground">
+              one desk.
+            </span>
           </h1>
           <p className="max-w-[46ch] text-sm text-muted-foreground">
             Studio Zero connects idea → script → content pack → schedule. No tab juggling, no

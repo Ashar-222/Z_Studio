@@ -17,15 +17,20 @@ export function AppShell({
   children: ReactNode;
   stage?: "PLAN" | "CREATE" | "PACKAGE" | "PUBLISH";
 }) {
-  const { state, ready } = useStore();
+  const { state, ready, userId, email, signOut } = useStore();
   const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
-    if (ready && !state.profile && path !== "/welcome") {
+    if (!ready) return;
+    if (!userId) {
+      if (path !== "/auth") navigate({ to: "/auth" });
+      return;
+    }
+    if (!state.profile && path !== "/welcome") {
       navigate({ to: "/welcome" });
     }
-  }, [ready, state.profile, path, navigate]);
+  }, [ready, userId, state.profile, path, navigate]);
 
   const counts = {
     active: state.items.filter((i) => i.status === "Draft" || i.status === "Idea").length,
@@ -77,6 +82,16 @@ export function AppShell({
           >
             + Create Content
           </Link>
+          {userId && (
+            <button
+              type="button"
+              onClick={() => void signOut()}
+              title={email ?? undefined}
+              className="border-2 border-foreground px-3 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-foreground hover:text-background"
+            >
+              Sign out
+            </button>
+          )}
         </div>
       </nav>
 

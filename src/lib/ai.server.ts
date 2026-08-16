@@ -19,12 +19,16 @@ export interface GeneratedIdea {
 
 const ENDPOINT = "https://api.deepseek.com/chat/completions";
 
+function apiKey(): string | undefined {
+  return process.env["Deepseek_API_Key"] || process.env["DEEPSEEK_API_KEY"];
+}
+
 export function hasKey() {
-  return Boolean(process.env["DEEPSEEK_API_KEY"]);
+  return Boolean(apiKey());
 }
 
 async function deepseek(system: string, user: string): Promise<string> {
-  const key = process.env["DEEPSEEK_API_KEY"];
+  const key = apiKey();
   if (!key) throw new Error("NO_KEY");
   const res = await fetch(ENDPOINT, {
     method: "POST",
