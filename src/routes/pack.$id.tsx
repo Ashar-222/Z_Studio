@@ -56,7 +56,10 @@ function Pack() {
 
   const thumb: Thumbnail = item.thumbnail ?? {
     ratio: "16:9",
-    headline: item.title.slice(0, 40).toUpperCase(),
+    headline: (item.title.length > 42
+      ? item.title.slice(0, 42).replace(/\s+\S*$/, "")
+      : item.title
+    ).toUpperCase(),
     kicker: item.platform.toUpperCase(),
     bg: "#fbff00",
     fg: "#000000",
