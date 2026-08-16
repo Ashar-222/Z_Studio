@@ -1,8 +1,12 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { Loader2, Sparkles } from "lucide-react";
 import { Btn, Field, Input, Panel, Select } from "@/components/brutal";
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { importSocialFn } from "@/lib/social.functions";
+import type { SocialProfile, SocialPlatform } from "@/lib/social.server";
 import {
   FORMATS,
   GOALS,
@@ -33,6 +37,15 @@ export const Route = createFileRoute("/welcome")({
 
 const FREQUENCIES = ["Daily", "3x per week", "Weekly", "Bi-weekly"];
 
+const SOCIALS: { id: SocialPlatform; label: string; platform: Platform }[] = [
+  { id: "youtube", label: "YouTube", platform: "YouTube" },
+  { id: "instagram", label: "Instagram", platform: "Instagram" },
+  { id: "tiktok", label: "TikTok", platform: "TikTok" },
+];
+
+const compact = (n?: number) =>
+  typeof n === "number" ? Intl.NumberFormat("en", { notation: "compact" }).format(n) : "—";
+
 function Welcome() {
   const { setProfile } = useStore();
   const navigate = useNavigate();
@@ -44,6 +57,32 @@ function Welcome() {
   const [contentType, setContentType] = useState<ContentFormat>("Short");
   const [frequency, setFrequency] = useState(FREQUENCIES[1]!);
   const [goal, setGoal] = useState<Goal>("Grow audience");
+  const [social, setSocial] = useState<SocialPlatform>("youtube");
+  const [handle, setHandle] = useState("");
+  const [importing, setImporting] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
+  const [imported, setImported] = useState<SocialProfile | null>(null);
+  const runImport = useServerFn(importSocialFn);
+
+  async function doImport() {
+    if (!handle.trim() || importing) return;
+    setImporting(true);
+    setImportError(null);
+    try {
+      const p = (await runImport({ data: { platform: social, handle } })) as SocialProfile;
+      setImported(p);
+      setName(p.displayName || p.handle);
+      setNiche(p.suggested.niche);
+      setAudience(p.suggested.audience);
+      setContentType(p.suggested.contentType as ContentFormat);
+      const match = SOCIALS.find((s) => s.id === p.platform)!.platform;
+      setPlatforms((prev) => (prev.includes(match) ? prev : [...prev, match]));
+    } catch (e) {
+      setImportError(e instanceof Error ? e.message : "Import failed");
+    } finally {
+      setImporting(false);
+    }
+  }
 
   const canNext = step === 0 ? name.trim() && niche.trim() : platforms.length > 0;
 
@@ -113,6 +152,84 @@ function Welcome() {
 
           {step === 0 && (
             <div className="animate-slide-up space-y-4">
+              <div className="border-2 border-foreground bg-muted p-3">
+                <span className="text-[10px] font-bold uppercase tracking-widest">
+                  Import from your socials
+                </span>
+                <div className="mt-2 flex gap-1">
+                  {SOCIALS.map((s) => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => setSocial(s.id)}
+                      className={cn(
+                        "press flex-1 border-2 border-foreground px-2 py-1 text-[10px] font-bold uppercase",
+                        social === s.id ? "bg-foreground text-background" : "bg-background",
+                      )}
+                    >
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
+                <div className="mt-2 flex gap-2">
+                  <Input
+                    value={handle}
+                    onChange={(e) => setHandle(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && void doImport()}
+                    placeholder="@yourhandle"
+                  />
+                  <Btn variant="primary" onClick={() => void doImport()} disabled={importing || !handle.trim()}>
+                    {importing ? (
+                      <Loader2 className="size-4 animate-spin" />
+                    ) : (
+                      <Sparkles className="size-4" />
+                    )}
+                  </Btn>
+                </div>
+                {importError && (
+                  <p className="mt-2 text-[10px] font-bold uppercase text-destructive">{importError}</p>
+                )}
+                {imported && (
+                  <div className="animate-slide-up mt-3 border-2 border-foreground bg-background p-3">
+                    <div className="flex items-center gap-2">
+                      {imported.avatarUrl && (
+                        <img
+                          src={imported.avatarUrl}
+                          alt={`${imported.displayName} avatar`}
+                          className="size-8 border-2 border-foreground object-cover"
+                          loading="lazy"
+                        />
+                      )}
+                      <div className="min-w-0">
+                        <p className="truncate text-xs font-bold uppercase">{imported.displayName}</p>
+                        <p className="truncate text-[10px] text-muted-foreground">@{imported.handle}</p>
+                      </div>
+                    </div>
+                    <div className="mt-2 grid grid-cols-3 gap-1 text-center text-[10px] font-bold uppercase">
+                      {[
+                        ["Followers", imported.metrics.followers],
+                        ["Posts", imported.metrics.posts],
+                        ["Views", imported.metrics.views],
+                      ].map(([label, v]) => (
+                        <div key={String(label)} className="border-2 border-foreground py-1">
+                          <div className="text-sm">{compact(v as number | undefined)}</div>
+                          <div className="text-muted-foreground">{label}</div>
+                        </div>
+                      ))}
+                    </div>
+                    {imported.topPosts.length > 0 && (
+                      <ul className="mt-2 space-y-1">
+                        {imported.topPosts.slice(0, 3).map((p, i) => (
+                          <li key={i} className="truncate text-[10px] text-muted-foreground">
+                            ▸ {p.title}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    <p className="mt-2 text-[10px] font-bold uppercase">Fields prefilled below</p>
+                  </div>
+                )}
+              </div>
               <Field label="Creator name">
                 <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Alex Rivera" />
               </Field>
