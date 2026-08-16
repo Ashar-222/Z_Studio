@@ -152,16 +152,24 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     (profile: Profile) => {
       setState((s) => ({ ...s, profile }));
       if (!userId) return;
-      void supabase.from("creator_profiles").upsert({
-        user_id: userId,
-        name: profile.name,
-        niche: profile.niche,
-        platforms: profile.platforms,
-        audience: profile.audience,
-        content_type: profile.contentType,
-        frequency: profile.frequency,
-        goal: profile.goal,
-      });
+      void supabase
+        .from("creator_profiles")
+        .upsert(
+          {
+            user_id: userId,
+            name: profile.name,
+            niche: profile.niche,
+            platforms: profile.platforms,
+            audience: profile.audience,
+            content_type: profile.contentType,
+            frequency: profile.frequency,
+            goal: profile.goal,
+          },
+          { onConflict: "user_id" },
+        )
+        .then(({ error }) => {
+          if (error) console.error("profile save failed", error);
+        });
     },
     [userId],
   );
@@ -173,7 +181,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       if (userId) {
         void supabase
           .from("content_items")
-          .insert({ id: item.id, user_id: userId, ...itemToRow(item) });
+          .insert({ id: item.id, user_id: userId, ...itemToRow(item) })
+          .then(({ error }) => {
+            if (error) console.error("item insert failed", error);
+          });
       }
       return item;
     },
@@ -190,7 +201,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         void supabase
           .from("content_items")
           .update(itemToRow(patch) as never)
-          .eq("id", id);
+          .eq("id", id)
+          .then(({ error }) => {
+            if (error) console.error("item update failed", error);
+          });
       }
     },
     [userId],
@@ -199,7 +213,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const removeItem = useCallback(
     (id: string) => {
       setState((s) => ({ ...s, items: s.items.filter((i) => i.id !== id) }));
-      if (userId) void supabase.from("content_items").delete().eq("id", id);
+      if (userId)
+        void supabase
+          .from("content_items")
+          .delete()
+          .eq("id", id)
+          .then(({ error }) => {
+            if (error) console.error("item delete failed", error);
+          });
     },
     [userId],
   );
