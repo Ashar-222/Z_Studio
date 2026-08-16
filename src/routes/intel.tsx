@@ -76,7 +76,7 @@ function friendly(e: unknown) {
 }
 
 function Intel() {
-  const { state, addItem, ready, userId } = useStore();
+  const { state, addItem, updateItem, ready, userId } = useStore();
   const navigate = useNavigate();
   const profile = state.profile;
 
@@ -229,8 +229,7 @@ function Intel() {
           audience: profile?.audience ?? "",
         },
       });
-      // script sections attached below via store update on the script page load
-      sessionStorage.setItem(`sz-script-${item.id}`, JSON.stringify(res.sections));
+      updateItem(item.id, { script: res.sections.map((sec) => ({ ...sec, id: uid() })) });
     } catch (e) {
       console.error("script generation failed", e);
     } finally {
