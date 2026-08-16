@@ -37,10 +37,56 @@ export const Route = createFileRoute("/welcome")({
 
 const FREQUENCIES = ["Daily", "3x per week", "Weekly", "Bi-weekly"];
 
-const SOCIALS: { id: SocialPlatform; label: string; platform: Platform }[] = [
-  { id: "youtube", label: "YouTube", platform: "YouTube" },
-  { id: "instagram", label: "Instagram", platform: "Instagram" },
-  { id: "tiktok", label: "TikTok", platform: "TikTok" },
+type Connection = {
+  id: string;
+  label: string;
+  api: SocialPlatform;
+  kind?: "videos" | "shorts";
+  platform: Platform;
+  hint: string;
+  prefix: string;
+  placeholder: string;
+};
+
+const SOCIALS: Connection[] = [
+  {
+    id: "youtube-videos",
+    label: "YouTube Videos",
+    api: "youtube",
+    kind: "videos",
+    platform: "YouTube",
+    hint: "Long-form uploads from your channel",
+    prefix: "youtube.com/@",
+    placeholder: "mkbhd",
+  },
+  {
+    id: "youtube-shorts",
+    label: "YouTube Shorts",
+    api: "youtube",
+    kind: "shorts",
+    platform: "YouTube",
+    hint: "Vertical shorts from your channel",
+    prefix: "youtube.com/@",
+    placeholder: "mkbhd",
+  },
+  {
+    id: "instagram",
+    label: "Instagram",
+    api: "instagram",
+    platform: "Instagram",
+    hint: "Reels, carousels and posts",
+    prefix: "instagram.com/",
+    placeholder: "natgeo",
+  },
+  {
+    id: "tiktok",
+    label: "TikTok",
+    api: "tiktok",
+    platform: "TikTok",
+    hint: "Your TikTok video history",
+    prefix: "tiktok.com/@",
+    placeholder: "khaby.lame",
+  },
 ];
 
 const compact = (n?: number) =>
@@ -57,7 +103,7 @@ function Welcome() {
   const [contentType, setContentType] = useState<ContentFormat>("Short");
   const [frequency, setFrequency] = useState(FREQUENCIES[1]!);
   const [goal, setGoal] = useState<Goal>("Grow audience");
-  const [social, setSocial] = useState<SocialPlatform>("youtube");
+  const [social, setSocial] = useState<Connection | null>(null);
   const [handle, setHandle] = useState("");
   const [importing, setImporting] = useState(false);
   const [importError, setImportError] = useState<string | null>(null);
@@ -65,17 +111,19 @@ function Welcome() {
   const runImport = useServerFn(importSocialFn);
 
   async function doImport() {
-    if (!handle.trim() || importing) return;
+    if (!social || !handle.trim() || importing) return;
     setImporting(true);
     setImportError(null);
     try {
-      const p = (await runImport({ data: { platform: social, handle } })) as SocialProfile;
+      const p = (await runImport({
+        data: { platform: social.api, handle, ...(social.kind ? { kind: social.kind } : {}) },
+      })) as SocialProfile;
       setImported(p);
       setName(p.displayName || p.handle);
       setNiche(p.suggested.niche);
       setAudience(p.suggested.audience);
       setContentType(p.suggested.contentType as ContentFormat);
-      const match = SOCIALS.find((s) => s.id === p.platform)!.platform;
+      const match = social.platform;
       setPlatforms((prev) => (prev.includes(match) ? prev : [...prev, match]));
     } catch (e) {
       setImportError(e instanceof Error ? e.message : "Import failed");
