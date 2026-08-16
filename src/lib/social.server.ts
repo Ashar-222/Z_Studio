@@ -5,10 +5,16 @@ const BASE = "https://api.socialfetch.dev";
 export type SocialPlatform = "youtube" | "instagram" | "tiktok";
 
 export interface SocialPost {
+  externalId: string;
   title: string;
   url?: string | undefined;
+  thumbnailUrl?: string | undefined;
+  publishedAt?: string | undefined;
   views?: number | undefined;
   likes?: number | undefined;
+  comments?: number | undefined;
+  shares?: number | undefined;
+  durationSeconds?: number | undefined;
 }
 
 export interface SocialProfile {
@@ -98,12 +104,17 @@ export async function importSocialProfile(input: {
       const v = await get<Envelope>(
         `/v1/youtube/channels/videos?handle=${encodeURIComponent(handle)}&sortBy=popular`,
       );
-      const list = ((v.data?.["videos"] as Record<string, unknown>[]) ?? []).slice(0, 6);
+      const list = ((v.data?.["videos"] as Record<string, unknown>[]) ?? []).slice(0, 12);
       topPosts = list.map((p) => ({
+        externalId: str(p["id"], str(p["url"], "")),
         title: str(p["title"], "Untitled"),
         url: typeof p["url"] === "string" ? p["url"] : undefined,
+        thumbnailUrl: typeof p["thumbnailUrl"] === "string" ? p["thumbnailUrl"] : undefined,
+        publishedAt: typeof p["publishedAt"] === "string" ? p["publishedAt"] : (typeof p["publishDate"] === "string" ? p["publishDate"] : undefined),
         views: num(p["viewCount"]) ?? num((p["metrics"] as Record<string, unknown>)?.["views"]),
         likes: num(p["likeCount"]) ?? num((p["metrics"] as Record<string, unknown>)?.["likes"]),
+        comments: num(p["commentCount"]),
+        durationSeconds: num(p["durationSeconds"]),
       }));
     } catch (e) {
       console.error("youtube videos failed", e);
@@ -115,11 +126,15 @@ export async function importSocialProfile(input: {
     if (d["lookupStatus"] === "not_found") throw new Error(`No Instagram profile found for @${handle}`);
     core = (d["profile"] as Record<string, unknown>) ?? {};
     metrics = (d["metrics"] as Record<string, unknown>) ?? {};
-    topPosts = ((d["recentPosts"] as Record<string, unknown>[]) ?? []).slice(0, 6).map((p) => ({
-      title: str(p["caption"], "Untitled").split("\n")[0]?.slice(0, 90) || "Untitled",
+    topPosts = ((d["recentPosts"] as Record<string, unknown>[]) ?? []).slice(0, 12).map((p) => ({
+      externalId: str(p["id"] ?? p["shortcode"], str(p["url"], "")),
+      title: str(p["caption"], "Untitled").split("\n")[0]?.slice(0, 120) || "Untitled",
       url: typeof p["url"] === "string" ? p["url"] : undefined,
+      thumbnailUrl: typeof p["thumbnailUrl"] === "string" ? p["thumbnailUrl"] : (typeof p["displayUrl"] === "string" ? p["displayUrl"] : undefined),
+      publishedAt: typeof p["takenAt"] === "string" ? p["takenAt"] : (typeof p["publishedAt"] === "string" ? p["publishedAt"] : undefined),
       views: num(p["videoViewCount"]) ?? num(p["playCount"]),
       likes: num(p["likeCount"]) ?? num(p["likes"]),
+      comments: num(p["commentCount"]) ?? num(p["comments"]),
     }));
   } else {
     const r = await get<Envelope>(`/v1/tiktok/profiles/${encodeURIComponent(handle)}`);
@@ -131,14 +146,20 @@ export async function importSocialProfile(input: {
       const v = await get<Envelope>(
         `/v1/tiktok/profiles/${encodeURIComponent(handle)}/videos`,
       );
-      const list = ((v.data?.["videos"] as Record<string, unknown>[]) ?? []).slice(0, 6);
+      const list = ((v.data?.["videos"] as Record<string, unknown>[]) ?? []).slice(0, 12);
       topPosts = list.map((p) => {
         const m = (p["metrics"] as Record<string, unknown>) ?? {};
         return {
-          title: str(p["description"] ?? p["title"], "Untitled").split("\n")[0]?.slice(0, 90) || "Untitled",
+          externalId: str(p["id"], str(p["url"], "")),
+          title: str(p["description"] ?? p["title"], "Untitled").split("\n")[0]?.slice(0, 120) || "Untitled",
           url: typeof p["url"] === "string" ? p["url"] : undefined,
+          thumbnailUrl: typeof p["thumbnailUrl"] === "string" ? p["thumbnailUrl"] : (typeof p["coverUrl"] === "string" ? p["coverUrl"] : undefined),
+          publishedAt: typeof p["createdAt"] === "string" ? p["createdAt"] : (typeof p["publishedAt"] === "string" ? p["publishedAt"] : undefined),
           views: num(m["plays"]) ?? num(p["playCount"]),
           likes: num(m["likes"]) ?? num(p["diggCount"]),
+          comments: num(m["comments"]) ?? num(p["commentCount"]),
+          shares: num(m["shares"]) ?? num(p["shareCount"]),
+          durationSeconds: num(p["durationSeconds"]),
         };
       });
     } catch (e) {
