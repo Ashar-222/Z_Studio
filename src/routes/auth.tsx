@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Btn, Field, Input, Panel } from "@/components/brutal";
+import { PasswordInput } from "@/components/PasswordInput";
 import { supabase } from "@/integrations/supabase/client";
 import { useStore } from "@/lib/store";
 
@@ -80,14 +81,7 @@ function AuthPage() {
             />
           </Field>
           <Field label="Password">
-            <Input
-              type="password"
-              required
-              minLength={6}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-            />
+            <PasswordInput required value={password} onChange={setPassword} />
           </Field>
           {msg && (
             <p className="border-2 border-foreground bg-muted p-3 text-xs uppercase">{msg}</p>
