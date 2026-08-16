@@ -36,7 +36,7 @@ const OPS = [
 
 function ScriptStudio() {
   const { id } = Route.useParams();
-  const { getItem, updateItem, addItem, ready } = useStore();
+  const { getItem, updateItem, addItem, ready, state } = useStore();
   const navigate = useNavigate();
   const item = getItem(id);
   const [busy, setBusy] = useState<string | null>(null);
@@ -71,7 +71,9 @@ function ScriptStudio() {
           angle: item.angle,
           format: item.format,
           platform: item.platform,
-          audience: "",
+          audience: state.profile?.audience ?? "",
+          niche: state.profile?.niche ?? "",
+          goal: state.profile?.goal ?? "",
         },
       });
       updateItem(item.id, { script: res.sections.map((s) => ({ ...s, id: uid() })), status: "Draft" });
