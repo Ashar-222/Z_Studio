@@ -80,14 +80,7 @@ function AuthPage() {
             />
           </Field>
           <Field label="Password">
-            <Input
-              type="password"
-              required
-              minLength={6}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-            />
+            <PasswordInput required value={password} onChange={setPassword} />
           </Field>
           {msg && (
             <p className="border-2 border-foreground bg-muted p-3 text-xs uppercase">{msg}</p>
