@@ -7,6 +7,8 @@ export interface IdeaSeed {
   audience: string;
   goal: string;
   format: ContentFormat | string;
+  thoughts?: string;
+  tone?: string;
 }
 
 export interface GeneratedIdea {
@@ -131,15 +133,18 @@ export function templatePack(title: string, hook: string, platform: string, nich
 export async function generateIdeas(seed: IdeaSeed): Promise<{ ideas: GeneratedIdea[]; mode: string }> {
   if (!hasKey()) return { ideas: templateIdeas(seed), mode: "TEMPLATE" };
   try {
+    const notes = (seed.thoughts ?? "").trim();
     const raw = await deepseek(
-      "You are a senior content strategist for short and long form creators. Reply with raw JSON only.",
+      "You are a senior content strategist for short and long form creators. When the creator supplies their own raw notes, thoughts or opinions, treat them as the primary creative source: expand, organise and sharpen THEIR idea instead of inventing a different one. Reply with raw JSON only.",
       `Generate 4 content ideas as a JSON array. Each object: {"title","hook","angle","format","why"}.
 Niche: ${seed.niche}
 Topic: ${seed.topic}
 Platform: ${seed.platform}
 Audience: ${seed.audience}
 Goal: ${seed.goal}
-Preferred format: ${seed.format}`,
+Preferred format: ${seed.format}
+Tone: ${seed.tone || "match the creator's natural voice"}
+${notes ? `Creator's own thoughts (PRIMARY SOURCE — build on these, keep their opinions, examples and phrasing where possible):\n"""\n${notes}\n"""` : "The creator gave no extra notes; ground every idea in the topic and niche."}`,
     );
     return { ideas: parseJson<GeneratedIdea[]>(raw), mode: "DEEPSEEK" };
   } catch (e) {
@@ -155,18 +160,27 @@ export async function generateScript(input: {
   format: string;
   platform: string;
   audience: string;
+  niche?: string;
+  goal?: string;
+  thoughts?: string;
+  tone?: string;
 }): Promise<{ sections: { label: string; body: string }[]; mode: string }> {
   if (!hasKey())
     return { sections: templateScript(input.title, input.hook, input.format), mode: "TEMPLATE" };
   try {
+    const notes = (input.thoughts ?? "").trim();
     const raw = await deepseek(
-      "You write tight, spoken-word creator scripts. Reply with raw JSON only.",
+      "You write tight, spoken-word creator scripts. When the creator supplies their own thoughts, notes or examples, they are the primary creative source: develop, structure and elevate THEIR material — never replace it with a generic concept. Reply with raw JSON only.",
       `Write a script as a JSON array of {"label","body"} using labels: Hook, Introduction, Main point 1, Main point 2, Example, CTA.
 Title: ${input.title}
 Hook: ${input.hook}
 Angle: ${input.angle}
 Format: ${input.format} for ${input.platform}
-Audience: ${input.audience}`,
+Audience: ${input.audience}
+Niche: ${input.niche ?? ""}
+Goal: ${input.goal ?? ""}
+Tone: ${input.tone || "match the creator's natural voice"}
+${notes ? `Creator's own thoughts (PRIMARY SOURCE — expand and organise these, keep their points, examples and opinions):\n"""\n${notes}\n"""` : ""}`,
     );
     return { sections: parseJson<{ label: string; body: string }[]>(raw), mode: "DEEPSEEK" };
   } catch (e) {
