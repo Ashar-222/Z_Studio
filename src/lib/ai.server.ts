@@ -27,7 +27,7 @@ export function hasKey() {
   return Boolean(apiKey());
 }
 
-async function deepseek(system: string, user: string): Promise<string> {
+export async function deepseek(system: string, user: string): Promise<string> {
   const key = apiKey();
   if (!key) throw new Error("NO_KEY");
   const res = await fetch(ENDPOINT, {
@@ -50,7 +50,7 @@ async function deepseek(system: string, user: string): Promise<string> {
   return json.choices?.[0]?.message?.content ?? "";
 }
 
-function parseJson<T>(raw: string): T {
+export function parseJson<T>(raw: string): T {
   const cleaned = raw
     .replace(/^```(?:json)?/i, "")
     .replace(/```$/, "")
