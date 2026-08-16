@@ -19,6 +19,7 @@ export interface SocialPost {
 
 export interface SocialProfile {
   platform: SocialPlatform;
+  kind?: "videos" | "shorts" | undefined;
   handle: string;
   displayName: string;
   bio: string;
@@ -86,6 +87,7 @@ Recent titles: ${posts.slice(0, 6).map((p) => p.title).join(" | ")}`,
 export async function importSocialProfile(input: {
   platform: SocialPlatform;
   handle: string;
+  kind?: "videos" | "shorts" | undefined;
 }): Promise<SocialProfile> {
   const handle = clean(input.handle);
   if (!handle) throw new Error("Enter a username");
