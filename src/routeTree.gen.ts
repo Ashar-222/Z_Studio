@@ -10,33 +10,115 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as IdeasRouteImport } from './routes/ideas'
+import { Route as LibraryRouteImport } from './routes/library'
+import { Route as PlannerRouteImport } from './routes/planner'
+import { Route as WelcomeRouteImport } from './routes/welcome'
+import { Route as PackIdRouteImport } from './routes/pack.$id'
+import { Route as ScriptIdRouteImport } from './routes/script.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IdeasRoute = IdeasRouteImport.update({
+  id: '/ideas',
+  path: '/ideas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlannerRoute = PlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PackIdRoute = PackIdRouteImport.update({
+  id: '/pack/$id',
+  path: '/pack/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScriptIdRoute = ScriptIdRouteImport.update({
+  id: '/script/$id',
+  path: '/script/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ideas': typeof IdeasRoute
+  '/library': typeof LibraryRoute
+  '/planner': typeof PlannerRoute
+  '/welcome': typeof WelcomeRoute
+  '/pack/$id': typeof PackIdRoute
+  '/script/$id': typeof ScriptIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ideas': typeof IdeasRoute
+  '/library': typeof LibraryRoute
+  '/planner': typeof PlannerRoute
+  '/welcome': typeof WelcomeRoute
+  '/pack/$id': typeof PackIdRoute
+  '/script/$id': typeof ScriptIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ideas': typeof IdeasRoute
+  '/library': typeof LibraryRoute
+  '/planner': typeof PlannerRoute
+  '/welcome': typeof WelcomeRoute
+  '/pack/$id': typeof PackIdRoute
+  '/script/$id': typeof ScriptIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/ideas'
+    | '/library'
+    | '/planner'
+    | '/welcome'
+    | '/pack/$id'
+    | '/script/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/ideas'
+    | '/library'
+    | '/planner'
+    | '/welcome'
+    | '/pack/$id'
+    | '/script/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/ideas'
+    | '/library'
+    | '/planner'
+    | '/welcome'
+    | '/pack/$id'
+    | '/script/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  IdeasRoute: typeof IdeasRoute
+  LibraryRoute: typeof LibraryRoute
+  PlannerRoute: typeof PlannerRoute
+  WelcomeRoute: typeof WelcomeRoute
+  PackIdRoute: typeof PackIdRoute
+  ScriptIdRoute: typeof ScriptIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +130,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ideas': {
+      id: '/ideas'
+      path: '/ideas'
+      fullPath: '/ideas'
+      preLoaderRoute: typeof IdeasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planner': {
+      id: '/planner'
+      path: '/planner'
+      fullPath: '/planner'
+      preLoaderRoute: typeof PlannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pack/$id': {
+      id: '/pack/$id'
+      path: '/pack/$id'
+      fullPath: '/pack/$id'
+      preLoaderRoute: typeof PackIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/script/$id': {
+      id: '/script/$id'
+      path: '/script/$id'
+      fullPath: '/script/$id'
+      preLoaderRoute: typeof ScriptIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  IdeasRoute: IdeasRoute,
+  LibraryRoute: LibraryRoute,
+  PlannerRoute: PlannerRoute,
+  WelcomeRoute: WelcomeRoute,
+  PackIdRoute: PackIdRoute,
+  ScriptIdRoute: ScriptIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
