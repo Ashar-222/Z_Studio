@@ -7,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import {
   emptyState,
@@ -134,13 +135,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       void load(session?.user.id ?? null);
     });
 
-    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: sub } = supabase.auth.onAuthStateChange(
+      (event: AuthChangeEvent, session: Session | null) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       setUserId(session?.user.id ?? null);
       setEmail(session?.user.email ?? null);
       setReady(false);
       void load(session?.user.id ?? null);
-    });
+      },
+    );
 
     return () => {
       active = false;
@@ -152,9 +155,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     (profile: Profile) => {
       setState((s) => ({ ...s, profile }));
       if (!userId) return;
-      void supabase
-        .from("creator_profiles")
-        .upsert(
+      void (async () => {
+        const { error } = await supabase.from("creator_profiles").upsert(
           {
             user_id: userId,
             name: profile.name,
@@ -166,10 +168,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
             goal: profile.goal,
           },
           { onConflict: "user_id" },
-        )
-        .then(({ error }) => {
-          if (error) console.error("profile save failed", error);
-        });
+        );
+        if (error) console.error("profile save failed", error);
+      })();
     },
     [userId],
   );
@@ -179,12 +180,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       const item: ContentItem = { ...input, id: uid(), createdAt: Date.now() };
       setState((s) => ({ ...s, items: [item, ...s.items] }));
       if (userId) {
-        void supabase
-          .from("content_items")
-          .insert({ id: item.id, user_id: userId, ...itemToRow(item) })
-          .then(({ error }) => {
-            if (error) console.error("item insert failed", error);
-          });
+        void (async () => {
+          const { error } = await supabase
+            .from("content_items")
+            .insert({ id: item.id, user_id: userId, ...itemToRow(item) });
+          if (error) console.error("item insert failed", error);
+        })();
       }
       return item;
     },
@@ -198,13 +199,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         items: s.items.map((i) => (i.id === id ? { ...i, ...patch } : i)),
       }));
       if (userId) {
-        void supabase
-          .from("content_items")
-          .update(itemToRow(patch) as never)
-          .eq("id", id)
-          .then(({ error }) => {
-            if (error) console.error("item update failed", error);
-          });
+        void (async () => {
+          const { error } = await supabase
+            .from("content_items")
+            .update(itemToRow(patch) as never)
+            .eq("id", id);
+          if (error) console.error("item update failed", error);
+        })();
       }
     },
     [userId],
@@ -214,13 +215,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     (id: string) => {
       setState((s) => ({ ...s, items: s.items.filter((i) => i.id !== id) }));
       if (userId)
-        void supabase
-          .from("content_items")
-          .delete()
-          .eq("id", id)
-          .then(({ error }) => {
-            if (error) console.error("item delete failed", error);
-          });
+        void (async () => {
+          const { error } = await supabase.from("content_items").delete().eq("id", id);
+          if (error) console.error("item delete failed", error);
+        })();
     },
     [userId],
   );
