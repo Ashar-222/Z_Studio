@@ -151,7 +151,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const setProfile = useCallback(
     (profile: Profile) => {
       setState((s) => ({ ...s, profile }));
-      (window as unknown as Record<string, unknown>)["__sp"] = String(userId);
       if (!userId) return;
       void supabase
         .from("creator_profiles")
