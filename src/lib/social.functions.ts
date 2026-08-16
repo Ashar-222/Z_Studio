@@ -69,6 +69,35 @@ export const syncSocialFn = createServerFn({ method: "POST" })
     return { profile, accountId: accountRow.id as string, lastSyncedAt: accountRow.last_synced_at as string };
   });
 
+export interface StoredAccount {
+  id: string;
+  platform: string;
+  handle: string;
+  display_name: string | null;
+  bio: string | null;
+  avatar_url: string | null;
+  profile_url: string | null;
+  verified: boolean | null;
+  followers: number | null;
+  posts_count: number | null;
+  total_views: number | null;
+  last_synced_at: string | null;
+}
+
+export interface StoredPost {
+  id: string;
+  account_id: string;
+  title: string | null;
+  url: string | null;
+  thumbnail_url: string | null;
+  published_at: string | null;
+  views: number | null;
+  likes: number | null;
+  comments: number | null;
+  shares: number | null;
+  duration_seconds: number | null;
+}
+
 /** Load previously imported accounts + posts from the database. */
 export const listSocialFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -76,20 +105,24 @@ export const listSocialFn = createServerFn({ method: "POST" })
     const { supabase, userId } = context;
     const { data: accounts, error } = await supabase
       .from("social_accounts")
-      .select("*")
+      .select(
+        "id, platform, handle, display_name, bio, avatar_url, profile_url, verified, followers, posts_count, total_views, last_synced_at",
+      )
       .eq("user_id", userId)
       .order("last_synced_at", { ascending: false });
     if (error) throw new Error(error.message);
     const ids = (accounts ?? []).map((a) => a.id);
-    let posts: Record<string, unknown>[] = [];
+    let posts: StoredPost[] = [];
     if (ids.length > 0) {
       const { data: postRows, error: pErr } = await supabase
         .from("social_posts")
-        .select("*")
+        .select(
+          "id, account_id, title, url, thumbnail_url, published_at, views, likes, comments, shares, duration_seconds",
+        )
         .in("account_id", ids)
         .order("views", { ascending: false, nullsFirst: false });
       if (pErr) throw new Error(pErr.message);
-      posts = (postRows ?? []) as unknown as Record<string, unknown>[];
+      posts = (postRows ?? []) as unknown as StoredPost[];
     }
-    return { accounts: (accounts ?? []) as unknown as Record<string, unknown>[], posts };
+    return { accounts: (accounts ?? []) as unknown as StoredAccount[], posts };
   });

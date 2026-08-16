@@ -5,7 +5,7 @@ import { Btn, Field, Input, Panel, SectionTitle, Select, Tag } from "@/component
 import { scriptFn } from "@/lib/ai.functions";
 import { opportunitiesFn } from "@/lib/insights.functions";
 import { scrapeFn, searchFn } from "@/lib/research.functions";
-import { listSocialFn, syncSocialFn } from "@/lib/social.functions";
+import { listSocialFn, syncSocialFn, type StoredAccount, type StoredPost } from "@/lib/social.functions";
 import { useStore, uid } from "@/lib/store";
 import { FORMATS, type ContentFormat, type Platform } from "@/lib/types";
 
@@ -31,6 +31,7 @@ export const Route = createFileRoute("/intel")({
 });
 
 type Row = Record<string, unknown>;
+
 
 interface Opportunity {
   key: string;
@@ -105,9 +106,9 @@ function Intel() {
 
   const load = useCallback(async () => {
     try {
-      const res = await listSocialFn();
-      setAccounts(res.accounts);
-      setPosts(res.posts);
+      const res = (await listSocialFn()) as { accounts: StoredAccount[]; posts: StoredPost[] };
+      setAccounts(res.accounts as unknown as Row[]);
+      setPosts(res.posts as unknown as Row[]);
       const first = res.accounts[0];
       if (first) setActiveAccount(String(first["id"]));
     } catch (e) {
