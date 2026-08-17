@@ -64,31 +64,22 @@ export function AppShell({
             ))}
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <Link
-            to="/planner"
-            className="hidden text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground lg:block"
-          >
-            Calendar
-          </Link>
-          <Link
-            to="/intel"
-            className="hidden text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground lg:block"
-          >
-            Intel
-          </Link>
-          <Link
-            to="/research"
-            className="hidden text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground lg:block"
-          >
-            Research
-          </Link>
-          <Link
-            to="/library"
-            className="hidden text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground lg:block"
-          >
-            Library
-          </Link>
+        <div className="flex flex-wrap items-center gap-2 md:gap-3">
+          {[
+            { to: "/planner", label: "Calendar" },
+            { to: "/intel", label: "Intel" },
+            { to: "/research", label: "Research" },
+            { to: "/library", label: "Library" },
+          ].map((l) => (
+            <Link
+              key={l.label}
+              to={l.to}
+              activeProps={{ className: "bg-foreground text-background" }}
+              className="border-2 border-foreground px-2 py-1 text-[10px] font-bold uppercase tracking-widest hover:bg-primary"
+            >
+              {l.label}
+            </Link>
+          ))}
           <Link
             to="/ideas"
             className="press hard-shadow-sm border-2 border-foreground bg-primary px-5 py-2 text-xs font-bold uppercase"
