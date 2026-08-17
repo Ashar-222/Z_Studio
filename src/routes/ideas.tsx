@@ -411,6 +411,29 @@ function Ideas() {
           )}
         </div>
       </div>
+
+      {handoff && (
+        <div className="fixed inset-0 z-[60] grid place-items-center bg-background/95">
+          <div className="forge-grid pointer-events-none absolute inset-0 opacity-60" />
+          <div className="relative space-y-5 text-center">
+            <p className="font-display text-4xl uppercase leading-none md:text-6xl">
+              Idea <span className="forge-arrow text-primary">→</span> Script Studio
+            </p>
+            <div className="flex items-end justify-center gap-1.5">
+              {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+                <span
+                  key={i}
+                  className="forge-bar h-8 w-2 bg-foreground"
+                  style={{ animationDelay: `${i * 80}ms` }}
+                />
+              ))}
+            </div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+              Building your script from this direction
+            </p>
+          </div>
+        </div>
+      )}
     </AppShell>
   );
 }
