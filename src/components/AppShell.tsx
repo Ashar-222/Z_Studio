@@ -2,6 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/lib/store";
+import { ZMark } from "@/components/ZMark";
 
 const STAGES = [
   { key: "PLAN", to: "/planner" },
@@ -42,8 +43,8 @@ export function AppShell({
     <div className="min-h-screen bg-background pb-14 font-mono text-foreground">
       <nav className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-4 border-b-4 border-foreground bg-background px-4 py-3 md:px-6">
         <div className="flex items-center gap-6">
-          <Link to="/" className="font-display text-3xl uppercase tracking-tighter md:text-4xl">
-            Z_Studion
+          <Link to="/" aria-label="Z Studio home">
+            <ZMark className="text-3xl md:text-4xl" />
           </Link>
           <div className="hidden items-center overflow-hidden border-2 border-foreground bg-muted md:flex">
             {STAGES.map((s, idx) => (
@@ -116,7 +117,7 @@ export function AppShell({
           <span className="hidden sm:inline">READY: {counts.ready}</span>
           <span className="hidden md:inline">PUBLISHED: {counts.published}</span>
         </div>
-        <div className="hidden md:block">ZSTUDION_SYSTEMS</div>
+        <div className="hidden md:block">ZSTUDIO_SYSTEMS</div>
       </footer>
     </div>
   );

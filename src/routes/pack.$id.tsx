@@ -11,13 +11,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/pack/$id")({
   head: () => ({
     meta: [
-      { title: "Content Pack — Z Studion" },
+      { title: "Content Pack — Z Studio" },
       {
         name: "description",
         content:
           "Turn a finished script into titles, captions, hashtags, hook variations and a 16:9 or 9:16 cover.",
       },
-      { property: "og:title", content: "Content Pack — Z Studion" },
+      { property: "og:title", content: "Content Pack — Z Studio" },
       {
         property: "og:description",
         content: "Packaging and cover design in the same flow as your script.",

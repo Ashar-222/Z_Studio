@@ -9,13 +9,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/planner")({
   head: () => ({
     meta: [
-      { title: "Content Planner — Z Studion" },
+      { title: "Content Planner — Z Studio" },
       {
         name: "description",
         content:
           "Plan, schedule and move content through Idea, Draft, Ready and Published in a calendar or board.",
       },
-      { property: "og:title", content: "Content Planner — Z Studion" },
+      { property: "og:title", content: "Content Planner — Z Studio" },
       {
         property: "og:description",
         content: "Calendar and board views for your entire content pipeline.",

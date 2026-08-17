@@ -9,13 +9,13 @@ import type { ContentItem } from "@/lib/types";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Command Center — Z Studion" },
+      { title: "Command Center — Z Studio" },
       {
         name: "description",
         content:
           "One desk for your whole channel: what to work on next, upcoming posts and your idea pipeline.",
       },
-      { property: "og:title", content: "Command Center — Z Studion" },
+      { property: "og:title", content: "Command Center — Z Studio" },
       {
         property: "og:description",
         content: "The creator dashboard that answers one question: what should I do next?",

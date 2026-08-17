@@ -78,14 +78,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Z Studion — Creator Command Center" },
+      { title: "Z Studio — Creator Command Center" },
       {
         name: "description",
         content:
           "Plan, script, package and schedule your content in one connected creator workflow.",
       },
-      { name: "author", content: "Z Studion" },
-      { property: "og:title", content: "Z Studion — Creator Command Center" },
+      { name: "author", content: "Z Studio" },
+      { property: "og:title", content: "Z Studio — Creator Command Center" },
       {
         property: "og:description",
         content:

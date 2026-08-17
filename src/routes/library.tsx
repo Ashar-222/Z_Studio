@@ -10,13 +10,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/library")({
   head: () => ({
     meta: [
-      { title: "Content Library — Z Studion" },
+      { title: "Content Library — Z Studio" },
       {
         name: "description",
         content:
           "Every idea, script, content pack and cover you've built, filtered by pipeline status.",
       },
-      { property: "og:title", content: "Content Library — Z Studion" },
+      { property: "og:title", content: "Content Library — Z Studio" },
       {
         property: "og:description",
         content: "Your full catalogue of ideas, scripts, packs and covers in one place.",
