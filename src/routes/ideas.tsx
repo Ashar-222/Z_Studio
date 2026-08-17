@@ -235,72 +235,180 @@ function Ideas() {
 
         <div className="lg:col-span-8">
           {loading && ideas.length === 0 && (
-            <div className="grid gap-6 md:grid-cols-2">
-              {[0, 1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="h-56 animate-pulse border-2 border-foreground bg-muted"
-                  style={{ animationDelay: `${i * 90}ms` }}
-                />
-              ))}
-            </div>
-          )}
-
-          {!loading && ideas.length === 0 && (
-            <Panel className="grid h-full min-h-64 place-items-center p-10 text-center">
-              <div className="space-y-3">
-                <p className="font-display text-4xl uppercase">No ideas on the bench</p>
-                <p className="text-xs uppercase tracking-widest text-muted-foreground">
-                  Set a seed and hit generate
+            <Panel thick className="relative overflow-hidden p-8">
+              <div className="forge-grid pointer-events-none absolute inset-0 opacity-60" />
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-primary/30">
+                <div className="forge-scan h-full w-full bg-primary/50" />
+              </div>
+              <div className="relative space-y-6">
+                <div className="flex items-end gap-1.5">
+                  {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
+                    <span
+                      key={i}
+                      className="forge-bar h-10 w-2 bg-foreground"
+                      style={{ animationDelay: `${i * 70}ms` }}
+                    />
+                  ))}
+                </div>
+                <p className="font-display text-3xl uppercase leading-none md:text-4xl">
+                  Forging 4 directions<span className="forge-kinetic">…</span>
                 </p>
+                <p className="max-w-md text-xs uppercase tracking-widest text-muted-foreground">
+                  Reading your topic, your thoughts and your creator profile
+                </p>
+                <div className="grid gap-4 md:grid-cols-2">
+                  {[0, 1, 2, 3].map((i) => (
+                    <div
+                      key={i}
+                      className="h-32 animate-pulse border-2 border-dashed border-foreground bg-muted"
+                      style={{ animationDelay: `${i * 120}ms` }}
+                    />
+                  ))}
+                </div>
               </div>
             </Panel>
           )}
 
-          <div className="grid gap-6 md:grid-cols-2">
-            {ideas.map((idea, i) => (
-              <div
-                key={idea.key}
-                className="animate-slide-up hard-shadow-hover space-y-4 border-2 border-foreground p-6"
-                style={{ animationDelay: `${i * 80}ms` }}
-              >
-                <div className="flex items-center justify-between">
-                  <Tag>{idea.format || format}</Tag>
-                  <span className="text-[10px] font-bold tracking-widest">
-                    {String(i + 1).padStart(2, "0")}/{String(ideas.length).padStart(2, "0")}
+          {!loading && ideas.length === 0 && (
+            <Panel thick className="relative h-full min-h-[26rem] overflow-hidden p-8">
+              <div className="forge-grid pointer-events-none absolute inset-0 opacity-50" />
+              <div className="relative flex h-full flex-col justify-between gap-8">
+                <div className="space-y-4">
+                  <span className="inline-block border-2 border-foreground bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-primary-foreground">
+                    Idea engine idle
                   </span>
-                </div>
-                <h3 className="text-xl font-bold uppercase leading-tight">{idea.title}</h3>
-                <div className="space-y-2 text-xs leading-relaxed">
-                  <p>
-                    <span className="font-bold uppercase">Hook:</span> {idea.hook}
-                  </p>
-                  <p>
-                    <span className="font-bold uppercase">Angle:</span> {idea.angle}
-                  </p>
-                  <p className="border-l-4 border-secondary pl-3 text-muted-foreground">
-                    {idea.why}
+                  <h3 className="font-display text-4xl uppercase leading-[0.95] md:text-6xl">
+                    Your idea{" "}
+                    <span className="forge-arrow text-primary">→</span>{" "}
+                    <span className="forge-kinetic">4 creative directions</span>
+                  </h3>
+                  <p className="max-w-lg text-xs leading-relaxed uppercase tracking-widest text-muted-foreground">
+                    Z Studio takes your topic and your own thoughts, mixes in your creator
+                    profile ({contextLine}), and returns four genuinely different concepts —
+                    each with a hook, an angle and why it could work.
                   </p>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  <Btn
-                    variant="primary"
-                    className={cn("flex-1")}
-                    onClick={() => void createScript(idea)}
-                  >
-                    Create script
-                  </Btn>
-                  <Btn onClick={() => save(idea)}>Save</Btn>
-                  <Btn
-                    variant="ghost"
-                    onClick={() => setIdeas((p) => p.filter((x) => x.key !== idea.key))}
-                  >
-                    Discard
-                  </Btn>
+                <div className="grid gap-3 sm:grid-cols-4">
+                  {["Story", "Contrarian", "Experiment", "Tutorial"].map((label, i) => (
+                    <div
+                      key={label}
+                      className="forge-pop border-2 border-dashed border-foreground p-4"
+                      style={{ animationDelay: `${300 + i * 120}ms` }}
+                    >
+                      <span className="block text-[10px] font-bold tracking-widest text-muted-foreground">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="text-sm font-bold uppercase">{label}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
+            </Panel>
+          )}
+
+          {ideas.length > 0 && (
+            <>
+              <div className="grid gap-6 md:grid-cols-2">
+                {ideas.map((idea, i) => {
+                  const isSel = selected === idea.key;
+                  return (
+                    <div
+                      key={idea.key}
+                      className={cn(
+                        "forge-pop group relative flex flex-col gap-4 border-2 border-foreground p-6 transition-all duration-150",
+                        isSel
+                          ? "hard-shadow -translate-y-1 border-4 bg-primary/15"
+                          : "hover:hard-shadow hover:-translate-y-1 hover:border-primary",
+                      )}
+                      style={{ animationDelay: `${i * 90}ms` }}
+                    >
+                      {isSel && (
+                        <span className="forge-flash absolute -right-2 -top-3 border-2 border-foreground bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-primary-foreground">
+                          Selected
+                        </span>
+                      )}
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-display text-3xl leading-none text-primary">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <div className="flex flex-wrap items-center justify-end gap-2">
+                          {idea.approach && (
+                            <span className="border-2 border-foreground bg-foreground px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-background">
+                              {idea.approach}
+                            </span>
+                          )}
+                          <Tag>{`${platform} ${idea.format || format}`}</Tag>
+                        </div>
+                      </div>
+
+                      <h3 className="text-xl font-bold uppercase leading-tight">{idea.title}</h3>
+
+                      {idea.summary && (
+                        <p className="text-xs leading-relaxed text-muted-foreground">
+                          {idea.summary}
+                        </p>
+                      )}
+
+                      <div className="space-y-2 border-t-2 border-dashed border-foreground pt-3 text-xs leading-relaxed">
+                        <p>
+                          <span className="font-bold uppercase">Hook:</span> {idea.hook}
+                        </p>
+                        <p>
+                          <span className="font-bold uppercase">Angle:</span> {idea.angle}
+                        </p>
+                        <p className="border-l-4 border-secondary pl-3 text-muted-foreground">
+                          <span className="font-bold uppercase text-foreground">Why it works:</span>{" "}
+                          {idea.why}
+                        </p>
+                      </div>
+
+                      <div className="mt-auto flex flex-wrap gap-2 pt-2">
+                        <Btn
+                          variant={isSel ? "dark" : "primary"}
+                          className="flex-1"
+                          onClick={() => setSelected(isSel ? null : idea.key)}
+                        >
+                          {isSel ? "Selected ✓" : "Use this idea →"}
+                        </Btn>
+                        <Btn onClick={() => save(idea)}>Save</Btn>
+                        <Btn
+                          variant="ghost"
+                          onClick={() => {
+                            setIdeas((p) => p.filter((x) => x.key !== idea.key));
+                            if (isSel) setSelected(null);
+                          }}
+                        >
+                          Discard
+                        </Btn>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {selected && (
+                <div className="forge-pop sticky bottom-4 mt-6 flex flex-wrap items-center justify-between gap-4 border-4 border-foreground bg-background p-4 hard-shadow">
+                  <p className="text-[10px] font-bold uppercase tracking-widest">
+                    Direction locked ·{" "}
+                    <span className="text-muted-foreground">
+                      {ideas.find((i) => i.key === selected)?.title}
+                    </span>
+                  </p>
+                  <Btn
+                    variant="primary"
+                    className="px-6 py-3"
+                    disabled={loading}
+                    onClick={() => {
+                      const idea = ideas.find((i) => i.key === selected);
+                      if (idea) void createScript(idea);
+                    }}
+                  >
+                    {loading ? "Writing script…" : "Continue to Script Studio →"}
+                  </Btn>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </AppShell>
