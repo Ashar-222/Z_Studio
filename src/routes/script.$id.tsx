@@ -10,13 +10,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/script/$id")({
   head: () => ({
     meta: [
-      { title: "Script Studio — Studio Zero" },
+      { title: "Script Studio — Z Studion" },
       {
         name: "description",
         content:
           "Write and refine your script section by section with targeted AI edits — hook, intro, points, CTA.",
       },
-      { property: "og:title", content: "Script Studio — Studio Zero" },
+      { property: "og:title", content: "Script Studio — Z Studion" },
       {
         property: "og:description",
         content: "Section-level AI editing that keeps the creator in control of the draft.",

@@ -10,13 +10,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/ideas")({
   head: () => ({
     meta: [
-      { title: "Idea Forge — Studio Zero" },
+      { title: "Idea Forge — Z Studion" },
       {
         name: "description",
         content:
           "Generate content ideas with hooks, angles and formats, then turn any idea straight into a script.",
       },
-      { property: "og:title", content: "Idea Forge — Studio Zero" },
+      { property: "og:title", content: "Idea Forge — Z Studion" },
       {
         property: "og:description",
         content: "Niche-aware idea generation wired directly into your script studio.",

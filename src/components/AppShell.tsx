@@ -43,7 +43,7 @@ export function AppShell({
       <nav className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-4 border-b-4 border-foreground bg-background px-4 py-3 md:px-6">
         <div className="flex items-center gap-6">
           <Link to="/" className="font-display text-3xl uppercase tracking-tighter md:text-4xl">
-            Studio_Zero
+            Z_Studion
           </Link>
           <div className="hidden items-center overflow-hidden border-2 border-foreground bg-muted md:flex">
             {STAGES.map((s, idx) => (
@@ -116,7 +116,7 @@ export function AppShell({
           <span className="hidden sm:inline">READY: {counts.ready}</span>
           <span className="hidden md:inline">PUBLISHED: {counts.published}</span>
         </div>
-        <div className="hidden md:block">STUDIO_ZERO_SYSTEMS</div>
+        <div className="hidden md:block">ZSTUDION_SYSTEMS</div>
       </footer>
     </div>
   );

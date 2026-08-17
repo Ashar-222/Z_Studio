@@ -19,13 +19,13 @@ import {
 export const Route = createFileRoute("/welcome")({
   head: () => ({
     meta: [
-      { title: "Set up your studio — Studio Zero" },
+      { title: "Set up your studio — Z Studion" },
       {
         name: "description",
         content:
-          "Tell Studio Zero your niche, platforms and goal to get a personalized creator command center.",
+          "Tell Z Studion your niche, platforms and goal to get a personalized creator command center.",
       },
-      { property: "og:title", content: "Set up your studio — Studio Zero" },
+      { property: "og:title", content: "Set up your studio — Z Studion" },
       {
         property: "og:description",
         content: "Onboard in 60 seconds and get a content pipeline built around your niche.",
@@ -168,7 +168,7 @@ function Welcome() {
             </span>
           </h1>
           <p className="max-w-[46ch] text-sm text-muted-foreground">
-            Studio Zero connects idea → script → content pack → schedule. No tab juggling, no
+            Z Studion connects idea → script → content pack → schedule. No tab juggling, no
             blank page. Answer seven questions and your pipeline is built.
           </p>
           <div className="flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-widest">
