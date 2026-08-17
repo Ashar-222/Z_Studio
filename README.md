@@ -1,758 +1,118 @@
-# Creator Command
+# Z Studio
 
-We are building a Product for the “Creator Tools” problem category:
+A single creator desk that turns a topic and your own thoughts into a researched, scripted, packaged, and scheduled piece of content.
 
-**Content planning, scripts.helping creators**
+## Problem
 
-The judging criteria are:
+Creators lose hours switching between tools: a notes app for ideas, a doc for scripts, a design tool for thumbnails, a spreadsheet for the calendar, and separate tabs for research. The work fragments before the video ever gets made. Z Studio keeps the entire pre-production workflow in one place so creators can move from spark to schedule without context switching.
 
-1. Creativity
+## Solution
 
-2. Problem solving
+Z Studio follows one linear workflow:
 
-3. Design
-
-4. Functionality
-
-The goal is NOT to build four disconnected tools. Build one coherent product that connects the creator workflow:
-
-**Plan → Create → Package → Publish → Analyze → Improve → Monetize**
-
-## IMPORTANT — DESIGN FIRST
-
-Before implementing the actual application, I want you to propose **3–5 distinctly different visual design directions** that would fit this product and score highly for creativity and design.
-
-Do NOT choose the final design yourself.
-
-For each design direction, explain:
-
-- Overall visual identity
-
-- Color direction
-
-- Typography style
-
-- Layout philosophy
-
-- Navigation style
-
-- Dashboard structure
-
-- How content/thumbnail previews would be displayed
-
-- What makes it feel different from a generic AI SaaS dashboard
-
-- Why it fits a creator-focused product
-
-- Strengths and weaknesses for a 48-hour competition
-
-The design options should be genuinely different from each other. Do not give me five variations of the same dark purple dashboard.
-
-Avoid generic “AI SaaS dashboard” aesthetics.
-
-I want the product to feel:
-
-- Premium
-
-- Modern
-
-- Creator-focused
-
-- Visually memorable
-
-- Easy to understand
-
-- Fast and practical
-
-- Original enough to stand out in a competition
-
-Motion graphics, animations, micro-interactions, transitions, and tasteful visual effects are strongly recommended where they improve the experience and make the product feel polished and memorable. Do not overuse them or make the interface distracting.
-
-Do not start implementing the final visual direction until I choose one.
-
----
-
-# PRODUCT CONCEPT
-
-The product is a Creator Command Center that helps creators manage their complete workflow.
-
-The core experience should connect:
-
-**Content Planning**
-
-→ **Script Creation**
-
-→ **Content Packaging**
-
-→ **Publishing/Tracking**
-
-→ **Analytics**
-
-→ **AI Insights**
-
-→ **Future Content Planning**
-
-The application should feel like ONE product rather than four separate mini-apps.
-
----
-
-# MAIN APP FLOW
-
-## 1. ONBOARDING
-
-First-time creator enters:
-
-- Creator name
-
-- Niche
-
-- Main platform(s)
-
-- Target audience
-
-- Content type
-
-- Posting frequency
-
-- Main goal
-
-Examples:
-
-- YouTube
-
-- Instagram
-
-- TikTok
-
-- YouTube Shorts
-
-- Instagram Reels
-
-Goals:
-
-- Grow audience
-
-- Increase engagement
-
-- Monetize
-
-- Build personal brand
-
-- Stay consistent
-
-After onboarding, create a personalized dashboard.
-
----
-
-# 2. DASHBOARD
-
-The dashboard should immediately answer:
-
-**“What should I do next?”**
-
-It should contain useful information such as:
-
-- Content currently in progress
-
-- Upcoming posts
-
-- Recent performance
-
-- Active brand deals
-
-- Important deadlines
-
-- AI-generated insights
-
-- Recommended next action
-
-There should be a prominent **Create Content** action.
-
-The dashboard should NOT become an overwhelming grid of dozens of cards.
-
-Prioritize hierarchy and useful information.
-
----
-
-# 3. CONTENT PLANNER
-
-Create a content planning workspace.
-
-Creators should be able to:
-
-- Create content ideas
-
-- Save ideas
-
-- Edit ideas
-
-- Assign a platform
-
-- Assign a content format
-
-- Set a publishing date
-
-- Set status
-
-Content statuses:
-
-**Idea → Draft → Ready → Published**
-
-Include both:
-
-- Calendar view
-
-- List/board view
-
-The creator should be able to click an idea and continue directly into the creation workflow.
-
----
-
-# 4. AI IDEA GENERATOR
-
-Use the DeepSeek API for useful AI functionality. which i will give you.
-
-The creator can enter:
-
-- Niche
-
-- Topic
-
-- Platform
-
-- Audience
-
-- Goal
-
-- Content format
-
-DeepSeek generates several content ideas.
-
-Each idea should contain:
-
-- Title
-
-- Hook
-
-- Content angle
-
-- Suggested format
-
-- Short explanation of why the idea could work
-
-Actions:
-
-**Save Idea**
-
-**Create Script**
-
-**Discard**
-
-Do not make this feel like a generic chatbot.
-
-The AI should be integrated directly into the workflow.
-
----
-
-# 5. SCRIPT STUDIO
-
-When a creator selects an idea, they can generate a script.
-
-The script should be structured into sections such as:
-
-- Hook
-
-- Introduction
-
-- Main points
-
-- Examples
-
-- CTA
-
-The creator can edit every section manually.
-
-AI actions should include:
-
-- Improve section
-
-- Rewrite section
-
-- Make shorter
-
-- Make more engaging
-
-- Regenerate section
-
-Do NOT regenerate the entire script every time.
-
-The creator should retain control.
-
-Include:
-
-- Save
-
-- Duplicate
-
-- Copy
-
-- Continue to Content Pack
-
----
-
-# 6. CONTENT PACK
-
-After creating a script, allow the creator to generate the rest of the content package.
-
-Possible outputs:
-
-- Video title
-
-- Caption
-
-- Description
-
-- Hashtags
-
-- Hook variations
-
-- Thumbnail/cover concept
-
-Include thumbnail/cover creation as a feature if it can be implemented reliably.
-
-Support:
-
-**YouTube thumbnail — 16:9**
-
-**Shorts/Reels cover — 9:16**
-
-The thumbnail system should prioritize functionality and editing rather than being an unnecessarily complicated image editor.
-
-If an image-generation API is not available, do not fake an AI image generator. A functional template/editor approach is acceptable.
-
-Motion graphics, animations, animated previews, transitions, and other tasteful visual effects are also recommended for the content/thumbnail experience where they genuinely improve the product.
-
----
-
-# 7. PUBLISHING / CONTENT TRACKING
-
-We do NOT need full Instagram/TikTok/YouTube publishing integrations for the core MVP.
-
-Instead, allow the creator to mark content as:
-
-- Draft
-
-- Ready
-
-- Published
-
-When publishing, store:
-
-- Platform
-
-- Publish date
-
-- Content title
-
-- Content format
-
-The system should then make that content available for analytics.
-
----
-
-# 8. ANALYTICS
-
-Analytics will **NOT be part of the initial development phase**.
-
-Do not spend the starting development time implementing analytics.
-
-The application architecture should still be designed so analytics can be added later without restructuring the entire product.
-
-When implemented later, creators should be able to manually enter or import performance data.
-
-Example:
-
-- Views
-
-- Likes
-
-- Comments
-
-- Shares
-
-- Saves
-
-- Followers gained
-
-The application should calculate useful metrics using its own logic.
-
-Examples:
-
-- Engagement rate
-
-- Average views
-
-- Best-performing content
-
-- Performance by platform
-
-- Performance by format
-
-- Performance over time
-
-Make analytics visually understandable.
-
----
-
-# 9. AI ANALYTICS INSIGHTS
-
-Analytics insights will also be implemented **later**, not in the initial development phase.
-
-When eventually implemented, use DeepSeek to analyze the creator's available performance data.
-
-The AI should answer questions such as:
-
-- What type of content performs best?
-
-- Which formats are performing poorly?
-
-- What patterns exist?
-
-- What should the creator make next?
-
-- What content should they make more/less of?
-
-Example:
-
-“Your tutorial videos are outperforming promotional videos. Your top-performing posts also use problem-based hooks. Consider creating more educational tutorial content this week.”
-
-The important part is that analytics should feed back into content planning.
-
-For example:
-
-**Analytics Insight → Create Recommended Content**
-
-This creates the loop:
-
-**Create → Measure → Learn → Create Better Content**
-
----
-
-# 10. BRAND DEALS
-
-Brand deals will **not be part of the initial development phase**.
-
-The architecture should still allow the feature to be added later without restructuring the entire product.
-
-When implemented, create a simple but useful brand-deal management system.
-
-Creators should be able to add:
-
-- Brand name
-
-- Campaign name
-
-- Payment amount
-
-- Deliverables
-
-- Deadline
-
-- Status
-
-- Notes
-
-- Payment status
-
-Deal statuses could include:
-
-- Lead
-
-- Negotiating
-
-- Active
-
-- Completed
-
-- Cancelled
-
-Payment statuses:
-
-- Pending
-
-- Partially paid
-
-- Paid
-
-Each deal should have a clear deliverable checklist.
-
-Example:
-
-- Script approved
-
-- Content created
-
-- Submitted
-
-- Published
-
-- Payment received
-
----
-
-# 11. AI BRAND DEAL ANALYZER
-
-The AI brand-deal analyzer will also be implemented **later**, not in the initial development phase.
-
-When implemented, allow the creator to paste a brand offer, campaign brief, or deal message.
-
-DeepSeek should extract structured information such as:
-
-- Brand
-
-- Payment
-
-- Deliverables
-
-- Deadline
-
-- Platforms
-
-- Important requirements
-
-Then show the extracted information clearly.
-
-It can also highlight things the creator should clarify, such as unclear payment terms or missing deadlines.
-
-Do NOT present this as legal advice.
-
-It is simply an organization and deal-understanding feature.
-
----
-
-# 12. CONNECT EVERYTHING
-
-The most important product behavior:
-
-For the **initial MVP**, prioritize this connected workflow:
-
-**Idea**
-
-↓
-
-**Create Script**
-
-↓
-
-**Create Content Pack**
-
-↓
-
-**Schedule**
-
-The longer-term product workflow should eventually become:
-
-**Idea**
-
-↓
-
-**Create Script**
-
-↓
-
-**Create Content Pack**
-
-↓
-
-**Schedule**
-
-↓
-
-**Publish**
-
-↓
-
-**Add Performance Data**
-
-↓
-
-**Analytics**
-
-↓
-
-**AI Insight**
-
-↓
-
-**Recommended Next Idea**
-
-Brand deals should connect to content where appropriate:
-
-**Brand Deal**
-
-↓
-
-**Deliverables**
-
-↓
-
-**Content**
-
-↓
-
-**Deadline**
-
-↓
-
-**Published**
-
-↓
-
-**Payment**
-
-This connected workflow is the core product differentiator.
-
----
-
-# TECHNICAL REQUIREMENTS
-
-Use a modern full-stack TypeScript architecture.
-
-Prefer:
-
-- React
-
-- TypeScript
-
-- Tailwind CSS
-
-- Supabase/database where appropriate
-
-- Proper component architecture
-
-- Clean reusable components
-
-DeepSeek API will be used for:
-
-- Idea generation
-
-- Script generation
-
-- Content analysis
-
-- Analytics insights
-
-- Brand deal extraction
-
-Keep API keys secure. Never expose secret API keys in client-side code.
-
-Use environment variables and server-side API calls where appropriate.
-
----
-
-# MVP PRIORITY
-
-Because this is a 48-hour competition, prioritize the **initial development phase** around:
-
-### MUST WORK FIRST
-
-1. Onboarding
-
-2. Dashboard
-
-3. Content planning
-
-4. AI idea generation
-
-5. Script Studio
-
-6. Thumbnail/cover creator
-
-7. Content Pack
-
-8. Content Calendar
-
-9. Core navigation and connected workflow
-
-### LATER / AFTER THE CORE MVP IS WORKING
-
-10. Analytics
-
-11. AI analytics insights
-
-12. Brand deal management
-
-13. AI brand-deal extraction
-
-14. Advanced analytics
-
-15. Additional platform integrations
-
-Do NOT waste time implementing complex social-media OAuth integrations unless they are extremely straightforward.
-
-Do NOT build unnecessary features.
-
-A smaller product where everything actually works is better than a huge product with broken features.
-
----
-
-# DESIGN PRINCIPLES
-
-Regardless of which visual direction is selected:
-
-- Avoid generic AI dashboard aesthetics.
-
-- Avoid excessive neon.
-
-- Avoid filling every area with cards.
-
-- Prioritize visual hierarchy.
-
-- Make content itself visually important.
-
-- Use real content previews where possible.
-
-- Make creator workflows obvious.
-
-- Keep navigation simple.
-
-- Make the product feel premium and memorable.
-
-- Use responsive design.
-
-- Make the interface look excellent on desktop first, while remaining usable on mobile.
-
-- Use tasteful motion graphics and animations where they enhance the experience.
-
-- Use micro-interactions and transitions to make the application feel polished.
-
-- Avoid unnecessary animations that hurt usability or performance.
-
-Again:
-
-**DO NOT SELECT THE FINAL DESIGN FOR ME.**
-
-First show me 3–5 strong, genuinely different design directions and let me choose.
-
-After I choose, we will implement that direction across the entire application consistently.
-
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/b3327637-73e4-415c-9a5a-3519095a9c1f).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+```mermaid
+flowchart LR
+  A[Topic + Your Thoughts] --> B[4 Creative Directions]
+  B --> C[Script Studio]
+  C --> D[Thumbnail + Title + Caption]
+  D --> E[Content Calendar]
 ```
+
+The product is built around the creator’s intent. You start with a topic and your own notes, the AI expands them into four distinct creative directions, you pick one, develop a script, generate titles/captions/hashtags, design a thumbnail, and schedule the result to a personal content calendar.
+
+## Core Features
+
+| Feature | What it does |
+| --- | --- |
+| Creator onboarding | Collects platform, niche, audience, content format, goal, and posting frequency so every later suggestion stays on-brand. |
+| Idea Forge | Takes a topic plus the creator’s own thoughts and returns 4 distinct directions (story, contrarian, tutorial, experiment, etc.). |
+| Creator thoughts input | A large free-form “Your Thoughts” field is treated as the primary creative source, so ideas feel like *yours* expanded, not invented from scratch. |
+| Script Studio | Turns a selected idea into a structured script with Hook, Introduction, Main Points, Example, and CTA sections. |
+| Thumbnail Studio | Builds a branded thumbnail directly in the browser with a headline, kicker, color theme, and layout. Supports PNG export for the selected ratio. |
+| Title & caption generation | Generates 3 title options, a caption, a description, and platform-appropriate hashtags. |
+| Content Calendar / Planner / Board | Tracks ideas through Idea → Draft → Ready → Published, with a calendar and board view. |
+| Content Library | Stores all created ideas, scripts, packs, and thumbnails in one persistent list. |
+| Public research (Firecrawl) | Searches and scrapes public web sources to ground ideas in real trends and data. |
+| Social profile syncing (SocialFetch) | Imports YouTube, Instagram, and TikTok profile metrics and top posts so recommendations can reflect actual content history. |
+
+## How It Works
+
+1. **Sign up or sign in** — Z Studio uses Supabase Auth for accounts.
+2. **Set up your profile** — Choose one platform to start (YouTube Videos, YouTube Shorts, Instagram, or TikTok), enter your username, and answer a few questions about your niche, audience, format, and posting frequency.
+3. **Open the Idea Forge** — Enter a topic and any rough notes or opinions in “Your Thoughts.” The app reads your saved profile context automatically, so you only type the new idea.
+4. **Pick a direction** — The AI returns 4 distinct creative angles. Choose the one that fits your voice.
+5. **Write the script** — In Script Studio, the idea is expanded into labeled sections. You can edit, regenerate, shorten, or rewrite any section.
+6. **Package it** — One click generates titles, caption, description, and hashtags, then sends the result to Thumbnail Studio.
+7. **Design the thumbnail** — Edit text, colors, and layout, then export the cover as a PNG.
+8. **Schedule it** — Add the finished item to the Planner, assign a date, and track it through the Kanban-style board or calendar.
+9. **Review in Library** — Every saved item lives in the Content Library for later reuse or updates.
+
+Optional intelligence steps:
+
+- **Research** — Search the public web with Firecrawl to generate grounded ideas from recent sources.
+- **Intel** — Connect your YouTube, Instagram, or TikTok profile via SocialFetch so Z Studio can compare your real content history with web research and surface opportunities.
+
+## AI & Integrations
+
+- **DeepSeek** — Powers all creative generation: idea expansion, script writing, section revision, titles, captions, and AI insight synthesis. DeepSeek is called from server functions only; the API key never reaches the browser.
+- **SocialFetch** — Fetches public profile metadata and top posts for YouTube, Instagram, and TikTok. Stored in the `social_accounts` and `social_posts` tables for analysis.
+- **Firecrawl** — Searches the public web and scrapes specific pages for recent research. Used in the Research page and the Intel opportunity analysis.
+- **Supabase** — Handles authentication, the PostgreSQL database, and row-level security for user data.
+
+If a key is missing, Z Studio falls back to deterministic local templates so the UI remains testable and demo-ready.
+
+## Tech Stack
+
+- **Framework:** TanStack Start (React 19 + file-based routing + server functions)
+- **Styling:** Tailwind CSS v4 with custom Neo-Brutalist design tokens
+- **UI primitives:** shadcn/ui + Radix UI components
+- **Database & Auth:** Supabase (PostgreSQL + Auth)
+- **AI:** DeepSeek API
+- **Research:** Firecrawl via Lovable AI Gateway
+- **Social data:** SocialFetch API
+- **Build tool:** Vite 8
+
+## Security
+
+All API keys are read inside server functions from environment variables and are never exposed to the client. Supabase Auth guards protected operations, and the publishable Supabase key is the only credential shipped to the browser.
+
+## Running Locally
+
+1. Clone the repository and install dependencies:
+
+```bash
+bun install
+```
+
+2. Copy the environment variables and fill in the values:
+
+```bash
+cp .env .env.local
+```
+
+Required environment variables:
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
+- `SUPABASE_URL`
+- `SUPABASE_PUBLISHABLE_KEY`
+- `Deepseek_API_Key` (or `DEEPSEEK_API_KEY`)
+- `LOVABLE_API_KEY`
+- `FIRECRAWL_API_KEY`
+- `SocialFetch_API_KEY` (or `SOCIALFETCH_API_KEY`)
+
+3. Start the dev server:
+
+```bash
+bun run dev
+```
+
+The app will be available at `http://localhost:8080`.
+
+## Competition Context
+
+Z Studio was built as an MVP for the HORIZON Creator Tools challenge within a 48-hour window. The goal is to demonstrate that a single, opinionated workflow can remove the friction between “I have an idea” and “my content is scheduled.” The product is intentionally focused on the pre-production phase: ideation, scripting, packaging, and planning.
+
+## Demo
+
+**Live demo:** _[URL will be added here before final submission]_
