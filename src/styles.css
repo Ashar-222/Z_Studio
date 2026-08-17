@@ -215,143 +215,361 @@
 
 /* ---- Z Studio animated wordmark ---- */
 @keyframes zmark-drop {
-  0% { opacity: 0; transform: translateY(-70%) rotate(-14deg) scale(1.3); }
-  60% { opacity: 1; transform: translateY(8%) rotate(3deg) scale(0.96); }
-  80% { transform: translateY(-3%) rotate(-1deg) scale(1.02); }
-  100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translateY(-70%) rotate(-14deg) scale(1.3);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(8%) rotate(3deg) scale(0.96);
+  }
+  80% {
+    transform: translateY(-3%) rotate(-1deg) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0) scale(1);
+  }
 }
 @keyframes zmark-jitter {
-  0%, 100% { transform: translate(0, 0) rotate(0); }
-  25% { transform: translate(-1px, -3px) rotate(-4deg); }
-  50% { transform: translate(1px, 2px) rotate(3deg); }
-  75% { transform: translate(-1px, 1px) rotate(-2deg); }
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
+  25% {
+    transform: translate(-1px, -3px) rotate(-4deg);
+  }
+  50% {
+    transform: translate(1px, 2px) rotate(3deg);
+  }
+  75% {
+    transform: translate(-1px, 1px) rotate(-2deg);
+  }
 }
 @keyframes zmark-burst {
-  0% { transform: scale(0.2); opacity: 0.9; }
-  100% { transform: scale(2.4); opacity: 0; }
+  0% {
+    transform: scale(0.2);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
 }
 @keyframes zmark-sweep {
-  0% { transform: translateX(-120%) skewX(-20deg); }
-  100% { transform: translateX(320%) skewX(-20deg); }
+  0% {
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(320%) skewX(-20deg);
+  }
 }
-.zmark-letter { display: inline-block; will-change: transform; }
-.zmark-intro .zmark-letter { animation: zmark-drop 0.55s cubic-bezier(.2,1.4,.4,1) both; }
-.zmark:hover .zmark-letter { animation: zmark-jitter 0.45s ease-in-out infinite; }
-.zmark:hover .zmark-letter:nth-child(even) { animation-direction: reverse; }
-.zmark-burst { animation: zmark-burst 0.5s ease-out forwards; }
-.zmark-sweep { animation: zmark-sweep 0.7s ease-out forwards; }
+.zmark-letter {
+  display: inline-block;
+  will-change: transform;
+}
+.zmark-intro .zmark-letter {
+  animation: zmark-drop 0.55s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+.zmark:hover .zmark-letter {
+  animation: zmark-jitter 0.45s ease-in-out infinite;
+}
+.zmark:hover .zmark-letter:nth-child(even) {
+  animation-direction: reverse;
+}
+.zmark-burst {
+  animation: zmark-burst 0.5s ease-out forwards;
+}
+.zmark-sweep {
+  animation: zmark-sweep 0.7s ease-out forwards;
+}
 @media (prefers-reduced-motion: reduce) {
-  .zmark-intro .zmark-letter, .zmark:hover .zmark-letter, .zmark-burst, .zmark-sweep { animation: none; }
+  .zmark-intro .zmark-letter,
+  .zmark:hover .zmark-letter,
+  .zmark-burst,
+  .zmark-sweep {
+    animation: none;
+  }
 }
 
 /* ---- Idea Forge motion ---- */
 @keyframes forge-grid-drift {
-  from { background-position: 0 0, 0 0; }
-  to { background-position: 40px 40px, 40px 40px; }
+  from {
+    background-position:
+      0 0,
+      0 0;
+  }
+  to {
+    background-position:
+      40px 40px,
+      40px 40px;
+  }
 }
 @keyframes forge-pop {
-  0% { opacity: 0; transform: translateY(26px) scale(0.97); }
-  70% { opacity: 1; transform: translateY(-4px) scale(1.005); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translateY(26px) scale(0.97);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.005);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 @keyframes forge-scan {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(600%); }
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(600%);
+  }
 }
 @keyframes forge-bar {
-  0%, 100% { transform: scaleY(0.25); }
-  50% { transform: scaleY(1); }
+  0%,
+  100% {
+    transform: scaleY(0.25);
+  }
+  50% {
+    transform: scaleY(1);
+  }
 }
 @keyframes forge-kinetic {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(6px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(6px);
+  }
 }
 @keyframes forge-arrow {
-  0%, 100% { transform: translateX(0); opacity: 1; }
-  50% { transform: translateX(10px); opacity: 0.55; }
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(10px);
+    opacity: 0.55;
+  }
 }
 @keyframes forge-flash {
-  0% { background-color: var(--color-primary); }
-  100% { background-color: transparent; }
+  0% {
+    background-color: var(--color-primary);
+  }
+  100% {
+    background-color: transparent;
+  }
 }
 .forge-grid {
   background-image:
-    linear-gradient(to right, color-mix(in oklab, var(--color-foreground) 12%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--color-foreground) 12%, transparent) 1px, transparent 1px);
-  background-size: 40px 40px, 40px 40px;
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-foreground) 12%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-foreground) 12%, transparent) 1px,
+      transparent 1px
+    );
+  background-size:
+    40px 40px,
+    40px 40px;
   animation: forge-grid-drift 6s linear infinite;
 }
-.forge-pop { animation: forge-pop 0.45s var(--ease-out-expo) both; }
-.forge-scan { animation: forge-scan 1.6s linear infinite; }
-.forge-bar { transform-origin: bottom; animation: forge-bar 0.9s ease-in-out infinite; }
-.forge-kinetic { display: inline-block; animation: forge-kinetic 2.4s ease-in-out infinite; }
-.forge-arrow { display: inline-block; animation: forge-arrow 1.4s ease-in-out infinite; }
-.forge-flash { animation: forge-flash 0.5s ease-out both; }
+.forge-pop {
+  animation: forge-pop 0.45s var(--ease-out-expo) both;
+}
+.forge-scan {
+  animation: forge-scan 1.6s linear infinite;
+}
+.forge-bar {
+  transform-origin: bottom;
+  animation: forge-bar 0.9s ease-in-out infinite;
+}
+.forge-kinetic {
+  display: inline-block;
+  animation: forge-kinetic 2.4s ease-in-out infinite;
+}
+.forge-arrow {
+  display: inline-block;
+  animation: forge-arrow 1.4s ease-in-out infinite;
+}
+.forge-flash {
+  animation: forge-flash 0.5s ease-out both;
+}
 @media (prefers-reduced-motion: reduce) {
-  .forge-grid, .forge-pop, .forge-scan, .forge-bar, .forge-kinetic, .forge-arrow, .forge-flash { animation: none; }
+  .forge-grid,
+  .forge-pop,
+  .forge-scan,
+  .forge-bar,
+  .forge-kinetic,
+  .forge-arrow,
+  .forge-flash {
+    animation: none;
+  }
 }
 
 /* ---- Onboarding / setup motion ---- */
 @keyframes ob-rise {
-  0% { opacity: 0; transform: translateY(28px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes ob-snap {
-  0% { opacity: 0; transform: translateX(-24px) skewX(-6deg); }
-  70% { opacity: 1; transform: translateX(4px) skewX(1deg); }
-  100% { opacity: 1; transform: translateX(0) skewX(0); }
+  0% {
+    opacity: 0;
+    transform: translateX(-24px) skewX(-6deg);
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(4px) skewX(1deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) skewX(0);
+  }
 }
 @keyframes ob-chip {
-  0% { opacity: 0; transform: translateY(8px) scale(0.96); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 @keyframes ob-step-in {
-  0% { opacity: 0; transform: translateY(14px); clip-path: inset(0 0 12% 0); }
-  100% { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0 0); }
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+    clip-path: inset(0 0 12% 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    clip-path: inset(0 0 0 0);
+  }
 }
 @keyframes ob-dot-fill {
-  0% { transform: scale(0.2); }
-  60% { transform: scale(1.15); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(0.2);
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 @keyframes ob-highlight {
-  0% { box-shadow: inset 0 0 0 40px var(--color-primary); }
-  100% { box-shadow: inset 0 0 0 0 var(--color-primary); }
+  0% {
+    box-shadow: inset 0 0 0 40px var(--color-primary);
+  }
+  100% {
+    box-shadow: inset 0 0 0 0 var(--color-primary);
+  }
 }
 @keyframes ob-ctx {
-  0% { opacity: 0; transform: translateY(6px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.ob-line { animation: ob-rise 0.6s var(--ease-out-expo) both; }
-.ob-snap { animation: ob-snap 0.5s cubic-bezier(.2,1.2,.3,1) both; animation-delay: 0.42s; }
-.ob-chip { animation: ob-chip 0.4s var(--ease-out-expo) both; }
-.ob-step { animation: ob-step-in 0.35s var(--ease-out-expo) both; }
-.ob-ctx { animation: ob-ctx 0.35s var(--ease-out-expo) both; }
-.ob-dot-on { animation: ob-dot-fill 0.35s cubic-bezier(.2,1.4,.4,1) both; }
+.ob-line {
+  animation: ob-rise 0.6s var(--ease-out-expo) both;
+}
+.ob-snap {
+  animation: ob-snap 0.5s cubic-bezier(0.2, 1.2, 0.3, 1) both;
+  animation-delay: 0.42s;
+}
+.ob-chip {
+  animation: ob-chip 0.4s var(--ease-out-expo) both;
+}
+.ob-step {
+  animation: ob-step-in 0.35s var(--ease-out-expo) both;
+}
+.ob-ctx {
+  animation: ob-ctx 0.35s var(--ease-out-expo) both;
+}
+.ob-dot-on {
+  animation: ob-dot-fill 0.35s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
 .ob-card {
-  transition: transform 0.18s var(--ease-out-expo), box-shadow 0.18s var(--ease-out-expo),
-    background-color 0.18s ease, border-color 0.18s ease;
+  transition:
+    transform 0.18s var(--ease-out-expo),
+    box-shadow 0.18s var(--ease-out-expo),
+    background-color 0.18s ease,
+    border-color 0.18s ease;
 }
-.ob-card:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 0 var(--color-foreground); }
-.ob-card:active { transform: translate(1px, 1px); box-shadow: 0 0 0 0 var(--color-foreground); }
-.ob-highlight { animation: ob-highlight 0.45s var(--ease-out-expo) both; }
-.ob-field input, .ob-field select, .ob-field textarea {
-  transition: box-shadow 0.18s var(--ease-out-expo), background-color 0.18s ease, transform 0.18s var(--ease-out-expo);
+.ob-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 0 var(--color-foreground);
 }
-.ob-field input:focus, .ob-field select:focus, .ob-field textarea:focus {
+.ob-card:active {
+  transform: translate(1px, 1px);
+  box-shadow: 0 0 0 0 var(--color-foreground);
+}
+.ob-highlight {
+  animation: ob-highlight 0.45s var(--ease-out-expo) both;
+}
+.ob-field input,
+.ob-field select,
+.ob-field textarea {
+  transition:
+    box-shadow 0.18s var(--ease-out-expo),
+    background-color 0.18s ease,
+    transform 0.18s var(--ease-out-expo);
+}
+.ob-field input:focus,
+.ob-field select:focus,
+.ob-field textarea:focus {
   transform: translate(-1px, -1px);
   box-shadow: 3px 3px 0 0 var(--color-foreground);
 }
 .ob-cta {
-  transition: transform 0.15s var(--ease-out-expo), box-shadow 0.15s var(--ease-out-expo),
-    background-color 0.15s ease, color 0.15s ease;
+  transition:
+    transform 0.15s var(--ease-out-expo),
+    box-shadow 0.15s var(--ease-out-expo),
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 .ob-cta:not(:disabled):hover {
   transform: translate(-2px, -2px);
   box-shadow: 5px 5px 0 0 var(--color-foreground);
 }
-.ob-cta:not(:disabled):active { transform: translate(1px, 1px); box-shadow: 0 0 0 0 var(--color-foreground); }
+.ob-cta:not(:disabled):active {
+  transform: translate(1px, 1px);
+  box-shadow: 0 0 0 0 var(--color-foreground);
+}
 @media (prefers-reduced-motion: reduce) {
-  .ob-line, .ob-snap, .ob-chip, .ob-step, .ob-ctx, .ob-dot-on, .ob-highlight { animation: none; }
-  .ob-card, .ob-cta, .ob-field input, .ob-field select { transition: none; }
+  .ob-line,
+  .ob-snap,
+  .ob-chip,
+  .ob-step,
+  .ob-ctx,
+  .ob-dot-on,
+  .ob-highlight {
+    animation: none;
+  }
+  .ob-card,
+  .ob-cta,
+  .ob-field input,
+  .ob-field select {
+    transition: none;
+  }
 }

@@ -54,9 +54,7 @@ export function AppShell({
                 className={cn(
                   "px-4 py-1 text-xs font-bold transition-colors",
                   idx < STAGES.length - 1 && "border-r-2 border-foreground",
-                  stage === s.key
-                    ? "bg-foreground text-background"
-                    : "hover:bg-primary",
+                  stage === s.key ? "bg-foreground text-background" : "hover:bg-primary",
                 )}
               >
                 {s.key}

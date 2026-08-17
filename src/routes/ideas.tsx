@@ -55,11 +55,7 @@ function Ideas() {
   const [selected, setSelected] = useState<string | null>(null);
   const [handoff, setHandoff] = useState(false);
 
-  const contextLine = [
-    `${platform} ${format}`,
-    profile?.niche,
-    profile?.audience,
-  ]
+  const contextLine = [`${platform} ${format}`, profile?.niche, profile?.audience]
     .filter(Boolean)
     .join(" · ");
 
@@ -154,9 +150,7 @@ function Ideas() {
       <div className="grid gap-8 lg:grid-cols-12">
         <Panel thick className="animate-slide-up space-y-4 p-6 lg:col-span-4">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-dashed border-foreground pb-3">
-            <span className="text-[10px] font-bold uppercase tracking-widest">
-              {contextLine}
-            </span>
+            <span className="text-[10px] font-bold uppercase tracking-widest">{contextLine}</span>
             <Link
               to="/welcome"
               className="text-[10px] font-bold uppercase tracking-widest underline underline-offset-4"
@@ -278,14 +272,13 @@ function Ideas() {
                     Idea engine idle
                   </span>
                   <h3 className="font-display text-4xl uppercase leading-[0.95] md:text-6xl">
-                    Your idea{" "}
-                    <span className="forge-arrow text-primary">→</span>{" "}
+                    Your idea <span className="forge-arrow text-primary">→</span>{" "}
                     <span className="forge-kinetic">4 creative directions</span>
                   </h3>
                   <p className="max-w-lg text-xs leading-relaxed uppercase tracking-widest text-muted-foreground">
-                    Z Studio takes your topic and your own thoughts, mixes in your creator
-                    profile ({contextLine}), and returns four genuinely different concepts —
-                    each with a hook, an angle and why it could work.
+                    Z Studio takes your topic and your own thoughts, mixes in your creator profile (
+                    {contextLine}), and returns four genuinely different concepts — each with a
+                    hook, an angle and why it could work.
                   </p>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-4">

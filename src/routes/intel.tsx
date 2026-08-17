@@ -5,7 +5,12 @@ import { Btn, Field, Input, Panel, SectionTitle, Select, Tag } from "@/component
 import { scriptFn } from "@/lib/ai.functions";
 import { opportunitiesFn } from "@/lib/insights.functions";
 import { scrapeFn, searchFn } from "@/lib/research.functions";
-import { listSocialFn, syncSocialFn, type StoredAccount, type StoredPost } from "@/lib/social.functions";
+import {
+  listSocialFn,
+  syncSocialFn,
+  type StoredAccount,
+  type StoredPost,
+} from "@/lib/social.functions";
 import { useStore, uid } from "@/lib/store";
 import { FORMATS, type ContentFormat, type Platform } from "@/lib/types";
 
@@ -21,7 +26,8 @@ export const Route = createFileRoute("/intel")({
       { property: "og:title", content: "Creator Intel — Z Studio" },
       {
         property: "og:description",
-        content: "Your own performance data plus live public research, turned into what to make next.",
+        content:
+          "Your own performance data plus live public research, turned into what to make next.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -31,7 +37,6 @@ export const Route = createFileRoute("/intel")({
 });
 
 type Row = Record<string, unknown>;
-
 
 interface Opportunity {
   key: string;
@@ -68,11 +73,14 @@ const when = (v: unknown) =>
 function friendly(e: unknown) {
   const msg = e instanceof Error ? e.message : String(e);
   if (/not configured/i.test(msg)) return `${msg} Add the key in project settings, then retry.`;
-  if (/\[404\]|not found/i.test(msg)) return "That profile could not be found. Check the username and try again.";
+  if (/\[404\]|not found/i.test(msg))
+    return "That profile could not be found. Check the username and try again.";
   if (/\[401\]|\[403\]|Unauthorized/i.test(msg))
     return "The integration rejected our credentials. The API key may be invalid or out of quota.";
-  if (/\[429\]|rate limit/i.test(msg)) return "The provider is rate-limiting us right now. Wait a moment and retry.";
-  if (/Failed to fetch|network/i.test(msg)) return "Network error reaching the provider. Check your connection and retry.";
+  if (/\[429\]|rate limit/i.test(msg))
+    return "The provider is rate-limiting us right now. Wait a moment and retry.";
+  if (/Failed to fetch|network/i.test(msg))
+    return "Network error reaching the provider. Check your connection and retry.";
   return msg;
 }
 
@@ -151,7 +159,9 @@ function Intel() {
       } else {
         const res = await searchFn({ data: { query: query.trim(), limit: 5 } });
         if (res.sources.length === 0) {
-          setResearchError("Firecrawl returned no results for that topic. Try a different phrasing.");
+          setResearchError(
+            "Firecrawl returned no results for that topic. Try a different phrasing.",
+          );
         }
         setSources(res.sources.map((s) => ({ url: s.url, title: s.title, snippet: s.snippet })));
       }
@@ -207,7 +217,9 @@ function Intel() {
   }
 
   async function toScript(o: Opportunity) {
-    const format = (FORMATS.includes(o.format as ContentFormat) ? o.format : "Short") as ContentFormat;
+    const format = (
+      FORMATS.includes(o.format as ContentFormat) ? o.format : "Short"
+    ) as ContentFormat;
     const plat = (profile?.platforms[0] ?? "YouTube") as Platform;
     const item = addItem({
       title: o.title,
@@ -293,7 +305,11 @@ function Intel() {
             <div className="space-y-2 border-2 border-destructive bg-destructive/10 p-3">
               <p className="text-[10px] font-bold uppercase tracking-widest">Connection failed</p>
               <p className="text-[11px] leading-relaxed">{socialError}</p>
-              <Btn className="w-full py-2 text-[10px]" onClick={() => void sync()} disabled={syncing}>
+              <Btn
+                className="w-full py-2 text-[10px]"
+                onClick={() => void sync()}
+                disabled={syncing}
+              >
                 Retry
               </Btn>
             </div>
@@ -312,8 +328,12 @@ function Intel() {
                     (String(a["id"]) === activeAccount ? "bg-primary" : "hover:bg-muted")
                   }
                 >
-                  <span className="truncate text-xs font-bold uppercase">@{String(a["handle"])}</span>
-                  <span className="text-[9px] uppercase tracking-widest">{String(a["platform"])}</span>
+                  <span className="truncate text-xs font-bold uppercase">
+                    @{String(a["handle"])}
+                  </span>
+                  <span className="text-[9px] uppercase tracking-widest">
+                    {String(a["platform"])}
+                  </span>
                 </button>
               ))}
             </div>
@@ -357,7 +377,9 @@ function Intel() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-[9px] uppercase tracking-widest text-muted-foreground">Last sync</p>
+                  <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
+                    Last sync
+                  </p>
                   <p className="text-[11px] font-bold">{when(account["last_synced_at"])}</p>
                   <Btn
                     className="mt-2 px-3 py-1 text-[10px]"
@@ -417,7 +439,8 @@ function Intel() {
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-xs font-bold">{String(p["title"])}</p>
                           <p className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">
-                            {fmt(p["views"])} views · {fmt(p["likes"])} likes · {fmt(p["comments"])} comments
+                            {fmt(p["views"])} views · {fmt(p["likes"])} likes · {fmt(p["comments"])}{" "}
+                            comments
                             {n(p["shares"]) !== null ? ` · ${fmt(p["shares"])} shares` : ""}
                             {typeof p["published_at"] === "string"
                               ? ` · ${new Date(String(p["published_at"])).toLocaleDateString()}`
@@ -550,7 +573,11 @@ function Intel() {
               <div className="space-y-2 border-2 border-destructive bg-destructive/10 p-3">
                 <p className="text-[10px] font-bold uppercase tracking-widest">Analysis failed</p>
                 <p className="text-[11px] leading-relaxed">{aiError}</p>
-                <Btn className="px-3 py-2 text-[10px]" onClick={() => void analyse()} disabled={analysing}>
+                <Btn
+                  className="px-3 py-2 text-[10px]"
+                  onClick={() => void analyse()}
+                  disabled={analysing}
+                >
                   Retry
                 </Btn>
               </div>

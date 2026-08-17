@@ -44,7 +44,8 @@ export const syncSocialFn = createServerFn({ method: "POST" })
       )
       .select()
       .single();
-    if (accErr || !accountRow) throw new Error(`Could not save profile: ${accErr?.message ?? "unknown error"}`);
+    if (accErr || !accountRow)
+      throw new Error(`Could not save profile: ${accErr?.message ?? "unknown error"}`);
 
     const posts = profile.topPosts.filter((p) => p.externalId);
     if (posts.length > 0) {
@@ -68,7 +69,11 @@ export const syncSocialFn = createServerFn({ method: "POST" })
       if (postErr) throw new Error(`Could not save posts: ${postErr.message}`);
     }
 
-    return { profile, accountId: accountRow.id as string, lastSyncedAt: accountRow.last_synced_at as string };
+    return {
+      profile,
+      accountId: accountRow.id as string,
+      lastSyncedAt: accountRow.last_synced_at as string,
+    };
   });
 
 export interface StoredAccount {

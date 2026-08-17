@@ -26,7 +26,11 @@ export interface SocialProfile {
   avatarUrl?: string | undefined;
   profileUrl?: string | undefined;
   verified: boolean;
-  metrics: { followers?: number | undefined; posts?: number | undefined; views?: number | undefined };
+  metrics: {
+    followers?: number | undefined;
+    posts?: number | undefined;
+    views?: number | undefined;
+  };
   topPosts: SocialPost[];
   suggested: { niche: string; audience: string; contentType: string };
 }
@@ -59,9 +63,14 @@ function clean(handle: string) {
 
 async function suggest(bio: string, name: string, platform: string, posts: SocialPost[]) {
   const fallback = {
-    niche: bio.split(/[\n|.•]/)[0]?.trim().slice(0, 40) || "Content creation",
+    niche:
+      bio
+        .split(/[\n|.•]/)[0]
+        ?.trim()
+        .slice(0, 40) || "Content creation",
     audience: `People following ${name || platform} creators`,
-    contentType: platform === "youtube" ? "Long-form video" : platform === "tiktok" ? "Short" : "Reel",
+    contentType:
+      platform === "youtube" ? "Long-form video" : platform === "tiktok" ? "Short" : "Reel",
   };
   if (!hasKey()) return fallback;
   try {
@@ -70,7 +79,10 @@ async function suggest(bio: string, name: string, platform: string, posts: Socia
       `Return {"niche","audience","contentType"} for this ${platform} creator. contentType must be one of: Long-form video, Short, Reel, Carousel, Tutorial, Video essay, Vlog. niche max 4 words, audience max 10 words.
 Name: ${name}
 Bio: ${bio}
-Recent titles: ${posts.slice(0, 6).map((p) => p.title).join(" | ")}`,
+Recent titles: ${posts
+        .slice(0, 6)
+        .map((p) => p.title)
+        .join(" | ")}`,
     );
     const out = parseJson<{ niche?: string; audience?: string; contentType?: string }>(raw);
     return {
@@ -99,7 +111,8 @@ export async function importSocialProfile(input: {
   if (input.platform === "youtube") {
     const r = await get<Envelope>(`/v1/youtube/channel?handle=${encodeURIComponent(handle)}`);
     const d = r.data ?? {};
-    if (d["lookupStatus"] === "not_found") throw new Error(`No YouTube channel found for @${handle}`);
+    if (d["lookupStatus"] === "not_found")
+      throw new Error(`No YouTube channel found for @${handle}`);
     core = (d["channel"] as Record<string, unknown>) ?? {};
     metrics = (d["metrics"] as Record<string, unknown>) ?? {};
     try {
@@ -112,7 +125,12 @@ export async function importSocialProfile(input: {
         title: str(p["title"], "Untitled"),
         url: typeof p["url"] === "string" ? p["url"] : undefined,
         thumbnailUrl: typeof p["thumbnailUrl"] === "string" ? p["thumbnailUrl"] : undefined,
-        publishedAt: typeof p["publishedAt"] === "string" ? p["publishedAt"] : (typeof p["publishDate"] === "string" ? p["publishDate"] : undefined),
+        publishedAt:
+          typeof p["publishedAt"] === "string"
+            ? p["publishedAt"]
+            : typeof p["publishDate"] === "string"
+              ? p["publishDate"]
+              : undefined,
         views: num(p["viewCount"]) ?? num((p["metrics"] as Record<string, unknown>)?.["views"]),
         likes: num(p["likeCount"]) ?? num((p["metrics"] as Record<string, unknown>)?.["likes"]),
         comments: num(p["commentCount"]),
@@ -121,7 +139,11 @@ export async function importSocialProfile(input: {
     } catch (e) {
       console.error("youtube videos failed", e);
     }
-    metrics = { followers: metrics["subscribers"], posts: metrics["videos"], views: metrics["views"] };
+    metrics = {
+      followers: metrics["subscribers"],
+      posts: metrics["videos"],
+      views: metrics["views"],
+    };
     if (input.kind === "shorts" || input.kind === "videos") {
       const isShort = (p: SocialPost) =>
         (p.durationSeconds !== undefined && p.durationSeconds <= 60) ||
@@ -132,15 +154,26 @@ export async function importSocialProfile(input: {
   } else if (input.platform === "instagram") {
     const r = await get<Envelope>(`/v1/instagram/profiles/${encodeURIComponent(handle)}`);
     const d = r.data ?? {};
-    if (d["lookupStatus"] === "not_found") throw new Error(`No Instagram profile found for @${handle}`);
+    if (d["lookupStatus"] === "not_found")
+      throw new Error(`No Instagram profile found for @${handle}`);
     core = (d["profile"] as Record<string, unknown>) ?? {};
     metrics = (d["metrics"] as Record<string, unknown>) ?? {};
     topPosts = ((d["recentPosts"] as Record<string, unknown>[]) ?? []).slice(0, 12).map((p) => ({
       externalId: str(p["id"] ?? p["shortcode"], str(p["url"], "")),
       title: str(p["caption"], "Untitled").split("\n")[0]?.slice(0, 120) || "Untitled",
       url: typeof p["url"] === "string" ? p["url"] : undefined,
-      thumbnailUrl: typeof p["thumbnailUrl"] === "string" ? p["thumbnailUrl"] : (typeof p["displayUrl"] === "string" ? p["displayUrl"] : undefined),
-      publishedAt: typeof p["takenAt"] === "string" ? p["takenAt"] : (typeof p["publishedAt"] === "string" ? p["publishedAt"] : undefined),
+      thumbnailUrl:
+        typeof p["thumbnailUrl"] === "string"
+          ? p["thumbnailUrl"]
+          : typeof p["displayUrl"] === "string"
+            ? p["displayUrl"]
+            : undefined,
+      publishedAt:
+        typeof p["takenAt"] === "string"
+          ? p["takenAt"]
+          : typeof p["publishedAt"] === "string"
+            ? p["publishedAt"]
+            : undefined,
       views: num(p["videoViewCount"]) ?? num(p["playCount"]),
       likes: num(p["likeCount"]) ?? num(p["likes"]),
       comments: num(p["commentCount"]) ?? num(p["comments"]),
@@ -148,22 +181,34 @@ export async function importSocialProfile(input: {
   } else {
     const r = await get<Envelope>(`/v1/tiktok/profiles/${encodeURIComponent(handle)}`);
     const d = r.data ?? {};
-    if (d["lookupStatus"] === "not_found") throw new Error(`No TikTok profile found for @${handle}`);
+    if (d["lookupStatus"] === "not_found")
+      throw new Error(`No TikTok profile found for @${handle}`);
     core = (d["profile"] as Record<string, unknown>) ?? {};
     metrics = (d["metrics"] as Record<string, unknown>) ?? {};
     try {
-      const v = await get<Envelope>(
-        `/v1/tiktok/profiles/${encodeURIComponent(handle)}/videos`,
-      );
+      const v = await get<Envelope>(`/v1/tiktok/profiles/${encodeURIComponent(handle)}/videos`);
       const list = ((v.data?.["videos"] as Record<string, unknown>[]) ?? []).slice(0, 12);
       topPosts = list.map((p) => {
         const m = (p["metrics"] as Record<string, unknown>) ?? {};
         return {
           externalId: str(p["id"], str(p["url"], "")),
-          title: str(p["description"] ?? p["title"], "Untitled").split("\n")[0]?.slice(0, 120) || "Untitled",
+          title:
+            str(p["description"] ?? p["title"], "Untitled")
+              .split("\n")[0]
+              ?.slice(0, 120) || "Untitled",
           url: typeof p["url"] === "string" ? p["url"] : undefined,
-          thumbnailUrl: typeof p["thumbnailUrl"] === "string" ? p["thumbnailUrl"] : (typeof p["coverUrl"] === "string" ? p["coverUrl"] : undefined),
-          publishedAt: typeof p["createdAt"] === "string" ? p["createdAt"] : (typeof p["publishedAt"] === "string" ? p["publishedAt"] : undefined),
+          thumbnailUrl:
+            typeof p["thumbnailUrl"] === "string"
+              ? p["thumbnailUrl"]
+              : typeof p["coverUrl"] === "string"
+                ? p["coverUrl"]
+                : undefined,
+          publishedAt:
+            typeof p["createdAt"] === "string"
+              ? p["createdAt"]
+              : typeof p["publishedAt"] === "string"
+                ? p["publishedAt"]
+                : undefined,
           views: num(m["plays"]) ?? num(p["playCount"]),
           likes: num(m["likes"]) ?? num(p["diggCount"]),
           comments: num(m["comments"]) ?? num(p["commentCount"]),

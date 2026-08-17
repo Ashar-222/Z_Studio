@@ -35,7 +35,10 @@ export function ThumbnailCanvas({ thumb, scale = 1 }: { thumb: Thumbnail; scale?
       )}
 
       {thumb.layout === "band" && (
-        <div className="absolute inset-x-0 bottom-0 h-1/3" style={{ backgroundColor: thumb.accent }} />
+        <div
+          className="absolute inset-x-0 bottom-0 h-1/3"
+          style={{ backgroundColor: thumb.accent }}
+        />
       )}
 
       <div
@@ -53,7 +56,10 @@ export function ThumbnailCanvas({ thumb, scale = 1 }: { thumb: Thumbnail; scale?
         </span>
         <span
           className="font-display uppercase leading-[0.9]"
-          style={{ fontSize: headlineSize * scale, color: thumb.layout === "band" ? thumb.fg : thumb.fg }}
+          style={{
+            fontSize: headlineSize * scale,
+            color: thumb.layout === "band" ? thumb.fg : thumb.fg,
+          }}
         >
           {thumb.headline}
         </span>
@@ -132,7 +138,10 @@ export function downloadThumbnail(thumb: Thumbnail, name: string) {
     }
 
     const a = document.createElement("a");
-    a.download = `${name.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40)}-${thumb.ratio.replace(":", "x")}.png`;
+    a.download = `${name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .slice(0, 40)}-${thumb.ratio.replace(":", "x")}.png`;
     a.href = canvas.toDataURL("image/png");
     a.click();
   };

@@ -153,12 +153,28 @@ function Welcome() {
         <div className="marquee-track flex w-max gap-8 py-1 text-[10px] font-bold uppercase tracking-[0.3em]">
           {Array.from({ length: 2 }).map((_, i) => (
             <span key={i} className="flex gap-8">
-              <span>Plan</span><span>→</span><span>Create</span><span>→</span>
-              <span>Package</span><span>→</span><span>Publish</span><span>→</span>
-              <span>Analyze</span><span>→</span><span>Improve</span><span>→</span>
-              <span>Monetize</span><span>→</span>
-              <span>Plan</span><span>→</span><span>Create</span><span>→</span>
-              <span>Package</span><span>→</span><span>Publish</span><span>→</span>
+              <span>Plan</span>
+              <span>→</span>
+              <span>Create</span>
+              <span>→</span>
+              <span>Package</span>
+              <span>→</span>
+              <span>Publish</span>
+              <span>→</span>
+              <span>Analyze</span>
+              <span>→</span>
+              <span>Improve</span>
+              <span>→</span>
+              <span>Monetize</span>
+              <span>→</span>
+              <span>Plan</span>
+              <span>→</span>
+              <span>Create</span>
+              <span>→</span>
+              <span>Package</span>
+              <span>→</span>
+              <span>Publish</span>
+              <span>→</span>
             </span>
           ))}
         </div>
@@ -183,8 +199,8 @@ function Welcome() {
             className="ob-line max-w-[46ch] text-sm text-muted-foreground"
             style={{ animationDelay: "0.6s" }}
           >
-            Z Studio connects idea → script → content pack → schedule. No tab juggling, no
-            blank page. Answer seven questions and your pipeline is built.
+            Z Studio connects idea → script → content pack → schedule. No tab juggling, no blank
+            page. Answer seven questions and your pipeline is built.
           </p>
           <div className="flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-widest">
             {["Idea forge", "Script studio", "Package module", "Calendar"].map((t, i) => (
@@ -217,7 +233,10 @@ function Welcome() {
             </span>
             <div className="flex gap-1">
               {[0, 1, 2].map((i) => (
-                <div key={i} className="size-3 overflow-hidden border-2 border-foreground bg-background">
+                <div
+                  key={i}
+                  className="size-3 overflow-hidden border-2 border-foreground bg-background"
+                >
                   {i <= step && <div className="ob-dot-on size-full bg-primary" />}
                 </div>
               ))}
@@ -303,7 +322,9 @@ function Welcome() {
                   </>
                 )}
                 {importError && (
-                  <p className="mt-2 text-[10px] font-bold uppercase text-destructive">{importError}</p>
+                  <p className="mt-2 text-[10px] font-bold uppercase text-destructive">
+                    {importError}
+                  </p>
                 )}
                 {imported && (
                   <div className="animate-slide-up mt-3 border-2 border-foreground bg-background p-3">
@@ -317,8 +338,12 @@ function Welcome() {
                         />
                       )}
                       <div className="min-w-0">
-                        <p className="truncate text-xs font-bold uppercase">{imported.displayName}</p>
-                        <p className="truncate text-[10px] text-muted-foreground">@{imported.handle}</p>
+                        <p className="truncate text-xs font-bold uppercase">
+                          {imported.displayName}
+                        </p>
+                        <p className="truncate text-[10px] text-muted-foreground">
+                          @{imported.handle}
+                        </p>
                       </div>
                     </div>
                     <div className="mt-2 grid grid-cols-3 gap-1 text-center text-[10px] font-bold uppercase">
@@ -347,7 +372,11 @@ function Welcome() {
                 )}
               </div>
               <Field label="Creator name">
-                <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Alex Rivera" />
+                <Input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Alex Rivera"
+                />
               </Field>
               <Field label="Niche">
                 <Input
@@ -380,9 +409,7 @@ function Welcome() {
                         key={p}
                         type="button"
                         onClick={() =>
-                          setPlatforms((prev) =>
-                            on ? prev.filter((x) => x !== p) : [...prev, p],
-                          )
+                          setPlatforms((prev) => (on ? prev.filter((x) => x !== p) : [...prev, p]))
                         }
                         className={cn(
                           "ob-card border-2 border-foreground px-3 py-1.5 text-xs font-bold uppercase",
@@ -433,7 +460,12 @@ function Welcome() {
                   )}
                 >
                   {g}
-                  <span className={cn("size-4 border-2 border-foreground", goal === g && "bg-foreground")} />
+                  <span
+                    className={cn(
+                      "size-4 border-2 border-foreground",
+                      goal === g && "bg-foreground",
+                    )}
+                  />
                 </button>
               ))}
             </div>

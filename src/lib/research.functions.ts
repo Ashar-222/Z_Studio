@@ -11,7 +11,9 @@ export const scrapeFn = createServerFn({ method: "POST" })
 export const searchFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) =>
-    z.object({ query: z.string().min(2).max(200), limit: z.number().min(1).max(10).optional() }).parse(d),
+    z
+      .object({ query: z.string().min(2).max(200), limit: z.number().min(1).max(10).optional() })
+      .parse(d),
   )
   .handler(async ({ data }) => ({ sources: await searchWeb(data.query, data.limit ?? 5) }));
 
