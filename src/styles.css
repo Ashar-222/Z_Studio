@@ -243,3 +243,50 @@
 @media (prefers-reduced-motion: reduce) {
   .zmark-intro .zmark-letter, .zmark:hover .zmark-letter, .zmark-burst, .zmark-sweep { animation: none; }
 }
+
+/* ---- Idea Forge motion ---- */
+@keyframes forge-grid-drift {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 40px 40px, 40px 40px; }
+}
+@keyframes forge-pop {
+  0% { opacity: 0; transform: translateY(26px) scale(0.97); }
+  70% { opacity: 1; transform: translateY(-4px) scale(1.005); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes forge-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(600%); }
+}
+@keyframes forge-bar {
+  0%, 100% { transform: scaleY(0.25); }
+  50% { transform: scaleY(1); }
+}
+@keyframes forge-kinetic {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+@keyframes forge-arrow {
+  0%, 100% { transform: translateX(0); opacity: 1; }
+  50% { transform: translateX(10px); opacity: 0.55; }
+}
+@keyframes forge-flash {
+  0% { background-color: var(--color-primary); }
+  100% { background-color: transparent; }
+}
+.forge-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-foreground) 12%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-foreground) 12%, transparent) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px;
+  animation: forge-grid-drift 6s linear infinite;
+}
+.forge-pop { animation: forge-pop 0.45s var(--ease-out-expo) both; }
+.forge-scan { animation: forge-scan 1.6s linear infinite; }
+.forge-bar { transform-origin: bottom; animation: forge-bar 0.9s ease-in-out infinite; }
+.forge-kinetic { display: inline-block; animation: forge-kinetic 2.4s ease-in-out infinite; }
+.forge-arrow { display: inline-block; animation: forge-arrow 1.4s ease-in-out infinite; }
+.forge-flash { animation: forge-flash 0.5s ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .forge-grid, .forge-pop, .forge-scan, .forge-bar, .forge-kinetic, .forge-arrow, .forge-flash { animation: none; }
+}
