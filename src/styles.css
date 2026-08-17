@@ -66,6 +66,16 @@
   animation: marqueeX 28s linear infinite;
 }
 
+/* Global reduced-motion fallback for the base utilities. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-up {
+    animation: none;
+  }
+  .marquee-track {
+    animation: none;
+  }
+}
+
 /*
  * Design system definition.
  *
