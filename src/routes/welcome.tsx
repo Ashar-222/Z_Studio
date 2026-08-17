@@ -134,6 +134,14 @@ function Welcome() {
 
   const canNext = step === 0 ? name.trim() && niche.trim() : platforms.length > 0;
 
+  const contextLine = [
+    platforms[0] ? `${platforms[0]} ${contentType}` : social?.label,
+    niche.trim(),
+    audience.trim(),
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
   function finish() {
     setProfile({ name, niche, platforms, audience, contentType, frequency, goal });
     navigate({ to: "/" });
@@ -157,49 +165,67 @@ function Welcome() {
       </div>
 
       <div className="mx-auto grid max-w-6xl gap-10 p-6 lg:grid-cols-2 lg:items-center lg:py-16">
-        <div className="animate-slide-up space-y-6">
+        <div className="space-y-6">
           <h1 className="font-display text-6xl uppercase leading-[1.05] md:text-8xl">
-            Your whole
-            <br />
-            channel,
-            <br />
-            <span className="box-decoration-clone bg-secondary px-2 text-secondary-foreground">
-              one desk.
+            <span className="ob-line block" style={{ animationDelay: "0.05s" }}>
+              Your whole
+            </span>
+            <span className="ob-line block" style={{ animationDelay: "0.18s" }}>
+              channel,
+            </span>
+            <span className="block">
+              <span className="ob-snap box-decoration-clone inline-block bg-secondary px-2 text-secondary-foreground">
+                one desk.
+              </span>
             </span>
           </h1>
-          <p className="max-w-[46ch] text-sm text-muted-foreground">
+          <p
+            className="ob-line max-w-[46ch] text-sm text-muted-foreground"
+            style={{ animationDelay: "0.6s" }}
+          >
             Z Studio connects idea → script → content pack → schedule. No tab juggling, no
             blank page. Answer seven questions and your pipeline is built.
           </p>
           <div className="flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-widest">
-            {["Idea forge", "Script studio", "Package module", "Calendar"].map((t) => (
-              <span key={t} className="border-2 border-foreground px-2 py-1">
+            {["Idea forge", "Script studio", "Package module", "Calendar"].map((t, i) => (
+              <span
+                key={t}
+                className="ob-chip border-2 border-foreground px-2 py-1"
+                style={{ animationDelay: `${0.72 + i * 0.09}s` }}
+              >
                 {t}
               </span>
             ))}
           </div>
+
+          {contextLine && (
+            <div
+              key={contextLine}
+              className="ob-ctx inline-flex items-center gap-2 border-2 border-foreground bg-muted px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest"
+            >
+              <span className="size-2 bg-primary" />
+              Learning your profile:
+              <span className="bg-foreground px-1.5 py-0.5 text-background">{contextLine}</span>
+            </div>
+          )}
         </div>
 
-        <Panel thick className="animate-slide-up p-6 md:p-8">
+        <Panel thick className="animate-slide-up ob-field p-6 md:p-8">
           <div className="mb-6 flex items-center justify-between">
             <span className="text-[10px] font-bold uppercase tracking-widest">
               Setup // step {step + 1} of 3
             </span>
             <div className="flex gap-1">
               {[0, 1, 2].map((i) => (
-                <div
-                  key={i}
-                  className={cn(
-                    "size-3 border-2 border-foreground transition-colors",
-                    i <= step ? "bg-primary" : "bg-background",
-                  )}
-                />
+                <div key={i} className="size-3 overflow-hidden border-2 border-foreground bg-background">
+                  {i <= step && <div className="ob-dot-on size-full bg-primary" />}
+                </div>
               ))}
             </div>
           </div>
 
           {step === 0 && (
-            <div className="animate-slide-up space-y-4">
+            <div className="ob-step space-y-4">
               <div className="border-2 border-foreground bg-muted p-3">
                 <span className="text-[10px] font-bold uppercase tracking-widest">
                   {social ? "Connect this platform" : "Choose one platform to connect"}
@@ -216,7 +242,7 @@ function Welcome() {
                           setImported(null);
                           setImportError(null);
                         }}
-                        className="press border-2 border-foreground bg-background px-2 py-2 text-left"
+                        className="ob-card border-2 border-foreground bg-background px-2 py-2 text-left hover:bg-primary/25"
                       >
                         <div className="text-[11px] font-bold uppercase">{s.label}</div>
                         <div className="text-[10px] text-muted-foreground">{s.hint}</div>
@@ -225,7 +251,7 @@ function Welcome() {
                   </div>
                 ) : (
                   <>
-                    <div className="mt-2 flex items-center justify-between gap-2 border-2 border-foreground bg-foreground px-2 py-1 text-background">
+                    <div className="ob-highlight mt-2 flex items-center justify-between gap-2 border-2 border-foreground bg-foreground px-2 py-1 text-background">
                       <span className="text-[10px] font-bold uppercase tracking-widest">
                         {social.label}
                       </span>
@@ -341,7 +367,7 @@ function Welcome() {
           )}
 
           {step === 1 && (
-            <div className="animate-slide-up space-y-5">
+            <div className="ob-step space-y-5">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                   Main platforms
@@ -359,8 +385,10 @@ function Welcome() {
                           )
                         }
                         className={cn(
-                          "press border-2 border-foreground px-3 py-1.5 text-xs font-bold uppercase",
-                          on ? "bg-secondary text-secondary-foreground" : "bg-background",
+                          "ob-card border-2 border-foreground px-3 py-1.5 text-xs font-bold uppercase",
+                          on
+                            ? "ob-highlight bg-secondary text-secondary-foreground"
+                            : "bg-background hover:bg-primary/25",
                         )}
                       >
                         {p}
@@ -390,7 +418,7 @@ function Welcome() {
           )}
 
           {step === 2 && (
-            <div className="animate-slide-up space-y-3">
+            <div className="ob-step space-y-3">
               <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 Main goal
               </span>
@@ -400,8 +428,8 @@ function Welcome() {
                   type="button"
                   onClick={() => setGoal(g)}
                   className={cn(
-                    "press flex w-full items-center justify-between border-2 border-foreground px-4 py-3 text-left text-sm font-bold uppercase",
-                    goal === g ? "bg-primary" : "bg-background hover:bg-muted",
+                    "ob-card flex w-full items-center justify-between border-2 border-foreground px-4 py-3 text-left text-sm font-bold uppercase",
+                    goal === g ? "ob-highlight bg-primary" : "bg-background hover:bg-muted",
                   )}
                 >
                   {g}
@@ -416,11 +444,16 @@ function Welcome() {
               Back
             </Btn>
             {step < 2 ? (
-              <Btn variant="primary" disabled={!canNext} onClick={() => setStep((s) => s + 1)}>
+              <Btn
+                variant="primary"
+                className="ob-cta"
+                disabled={!canNext}
+                onClick={() => setStep((s) => s + 1)}
+              >
                 Continue
               </Btn>
             ) : (
-              <Btn variant="dark" onClick={finish}>
+              <Btn variant="dark" className="ob-cta" onClick={finish}>
                 Build my studio →
               </Btn>
             )}

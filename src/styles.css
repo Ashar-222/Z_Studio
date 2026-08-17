@@ -290,3 +290,68 @@
 @media (prefers-reduced-motion: reduce) {
   .forge-grid, .forge-pop, .forge-scan, .forge-bar, .forge-kinetic, .forge-arrow, .forge-flash { animation: none; }
 }
+
+/* ---- Onboarding / setup motion ---- */
+@keyframes ob-rise {
+  0% { opacity: 0; transform: translateY(28px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes ob-snap {
+  0% { opacity: 0; transform: translateX(-24px) skewX(-6deg); }
+  70% { opacity: 1; transform: translateX(4px) skewX(1deg); }
+  100% { opacity: 1; transform: translateX(0) skewX(0); }
+}
+@keyframes ob-chip {
+  0% { opacity: 0; transform: translateY(8px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes ob-step-in {
+  0% { opacity: 0; transform: translateY(14px); clip-path: inset(0 0 12% 0); }
+  100% { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0 0); }
+}
+@keyframes ob-dot-fill {
+  0% { transform: scale(0.2); }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+@keyframes ob-highlight {
+  0% { box-shadow: inset 0 0 0 40px var(--color-primary); }
+  100% { box-shadow: inset 0 0 0 0 var(--color-primary); }
+}
+@keyframes ob-ctx {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.ob-line { animation: ob-rise 0.6s var(--ease-out-expo) both; }
+.ob-snap { animation: ob-snap 0.5s cubic-bezier(.2,1.2,.3,1) both; animation-delay: 0.42s; }
+.ob-chip { animation: ob-chip 0.4s var(--ease-out-expo) both; }
+.ob-step { animation: ob-step-in 0.35s var(--ease-out-expo) both; }
+.ob-ctx { animation: ob-ctx 0.35s var(--ease-out-expo) both; }
+.ob-dot-on { animation: ob-dot-fill 0.35s cubic-bezier(.2,1.4,.4,1) both; }
+.ob-card {
+  transition: transform 0.18s var(--ease-out-expo), box-shadow 0.18s var(--ease-out-expo),
+    background-color 0.18s ease, border-color 0.18s ease;
+}
+.ob-card:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 0 var(--color-foreground); }
+.ob-card:active { transform: translate(1px, 1px); box-shadow: 0 0 0 0 var(--color-foreground); }
+.ob-highlight { animation: ob-highlight 0.45s var(--ease-out-expo) both; }
+.ob-field input, .ob-field select, .ob-field textarea {
+  transition: box-shadow 0.18s var(--ease-out-expo), background-color 0.18s ease, transform 0.18s var(--ease-out-expo);
+}
+.ob-field input:focus, .ob-field select:focus, .ob-field textarea:focus {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 0 var(--color-foreground);
+}
+.ob-cta {
+  transition: transform 0.15s var(--ease-out-expo), box-shadow 0.15s var(--ease-out-expo),
+    background-color 0.15s ease, color 0.15s ease;
+}
+.ob-cta:not(:disabled):hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 0 var(--color-foreground);
+}
+.ob-cta:not(:disabled):active { transform: translate(1px, 1px); box-shadow: 0 0 0 0 var(--color-foreground); }
+@media (prefers-reduced-motion: reduce) {
+  .ob-line, .ob-snap, .ob-chip, .ob-step, .ob-ctx, .ob-dot-on, .ob-highlight { animation: none; }
+  .ob-card, .ob-cta, .ob-field input, .ob-field select { transition: none; }
+}
