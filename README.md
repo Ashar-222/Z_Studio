@@ -22,18 +22,18 @@ The product is built around the creator’s intent. You start with a topic and y
 
 ## Core Features
 
-| Feature | What it does |
-| --- | --- |
-| Creator onboarding | Collects platform, niche, audience, content format, goal, and posting frequency so every later suggestion stays on-brand. |
-| Idea Forge | Takes a topic plus the creator’s own thoughts and returns 4 distinct directions (story, contrarian, tutorial, experiment, etc.). |
-| Creator thoughts input | A large free-form “Your Thoughts” field is treated as the primary creative source, so ideas feel like *yours* expanded, not invented from scratch. |
-| Script Studio | Turns a selected idea into a structured script with Hook, Introduction, Main Points, Example, and CTA sections. |
-| Thumbnail Studio | Builds a branded thumbnail directly in the browser with a headline, kicker, color theme, and layout. Supports PNG export for the selected ratio. |
-| Title & caption generation | Generates 3 title options, a caption, a description, and platform-appropriate hashtags. |
-| Content Calendar / Planner / Board | Tracks ideas through Idea → Draft → Ready → Published, with a calendar and board view. |
-| Content Library | Stores all created ideas, scripts, packs, and thumbnails in one persistent list. |
-| Public research (Firecrawl) | Searches and scrapes public web sources to ground ideas in real trends and data. |
-| Social profile syncing (SocialFetch) | Imports YouTube, Instagram, and TikTok profile metrics and top posts so recommendations can reflect actual content history. |
+| Feature                              | What it does                                                                                                                                       |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Creator onboarding                   | Collects platform, niche, audience, content format, goal, and posting frequency so every later suggestion stays on-brand.                          |
+| Idea Forge                           | Takes a topic plus the creator’s own thoughts and returns 4 distinct directions (story, contrarian, tutorial, experiment, etc.).                   |
+| Creator thoughts input               | A large free-form “Your Thoughts” field is treated as the primary creative source, so ideas feel like _yours_ expanded, not invented from scratch. |
+| Script Studio                        | Turns a selected idea into a structured script with Hook, Introduction, Main Points, Example, and CTA sections.                                    |
+| Thumbnail Studio                     | Builds a branded thumbnail directly in the browser with a headline, kicker, color theme, and layout. Supports PNG export for the selected ratio.   |
+| Title & caption generation           | Generates 3 title options, a caption, a description, and platform-appropriate hashtags.                                                            |
+| Content Calendar / Planner / Board   | Tracks ideas through Idea → Draft → Ready → Published, with a calendar and board view.                                                             |
+| Content Library                      | Stores all created ideas, scripts, packs, and thumbnails in one persistent list.                                                                   |
+| Public research (Firecrawl)          | Searches and scrapes public web sources to ground ideas in real trends and data.                                                                   |
+| Social profile syncing (SocialFetch) | Imports YouTube, Instagram, and TikTok profile metrics and top posts so recommendations can reflect actual content history.                        |
 
 ## How It Works
 
@@ -76,38 +76,16 @@ If a key is missing, Z Studio falls back to deterministic local templates so the
 
 All API keys are read inside server functions from environment variables and are never exposed to the client. Supabase Auth guards protected operations, and the publishable Supabase key is the only credential shipped to the browser.
 
-## Running Locally
-
-1. Clone the repository and install dependencies:
-
-```bash
-bun install
-```
-
-2. Copy the environment variables and fill in the values:
-
-```bash
-cp .env .env.local
-```
-
-Required environment variables:
+environment variables used:
 
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_PUBLISHABLE_KEY`
 - `SUPABASE_URL`
 - `SUPABASE_PUBLISHABLE_KEY`
-- `Deepseek_API_Key` (or `DEEPSEEK_API_KEY`)
+- `Deepseek_API_Key`
 - `LOVABLE_API_KEY`
 - `FIRECRAWL_API_KEY`
-- `SocialFetch_API_KEY` (or `SOCIALFETCH_API_KEY`)
-
-3. Start the dev server:
-
-```bash
-bun run dev
-```
-
-The app will be available at `http://localhost:8080`.
+- `SocialFetch_API_KEY`
 
 ## Competition Context
 
