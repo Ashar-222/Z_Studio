@@ -17,6 +17,8 @@ export interface GeneratedIdea {
   angle: string;
   format: string;
   why: string;
+  approach?: string;
+  summary?: string;
 }
 
 const ENDPOINT = "https://api.deepseek.com/chat/completions";
@@ -65,17 +67,44 @@ export function parseJson<T>(raw: string): T {
 /* ---------- template engine used when no DeepSeek key is configured ---------- */
 
 const ANGLES = [
-  { tag: "Contrarian", lead: "Why the standard advice about", tail: "is quietly wrong" },
-  { tag: "Teardown", lead: "A frame-by-frame teardown of", tail: "that actually works" },
-  { tag: "System", lead: "The repeatable system behind", tail: "in under 30 days" },
-  { tag: "Mistake", lead: "The 3 mistakes killing", tail: "for beginners" },
-  { tag: "Case study", lead: "What 90 days of", tail: "taught me" },
+  {
+    tag: "Story-driven",
+    lead: "The moment",
+    tail: "changed how I work",
+    concept: "A first-person narrative that carries the lesson inside a real moment.",
+  },
+  {
+    tag: "Contrarian",
+    lead: "Why the standard advice about",
+    tail: "is quietly wrong",
+    concept: "Take the popular take apart and replace it with a sharper rule.",
+  },
+  {
+    tag: "Experiment",
+    lead: "I tested",
+    tail: "for 30 days — here's the data",
+    concept: "A measurable challenge with a visible before/after result.",
+  },
+  {
+    tag: "Tutorial",
+    lead: "The exact steps behind",
+    tail: "start to finish",
+    concept: "A repeatable walkthrough the viewer can copy immediately.",
+  },
+  {
+    tag: "Curiosity",
+    lead: "Nobody explains this part of",
+    tail: "— so here it is",
+    concept: "Open an information gap early and pay it off with one concrete reveal.",
+  },
 ];
 
-export function templateIdeas(seed: IdeaSeed, count = 3): GeneratedIdea[] {
+export function templateIdeas(seed: IdeaSeed, count = 4): GeneratedIdea[] {
   const subject = seed.topic || seed.niche || "your niche";
   return ANGLES.slice(0, count).map((a) => ({
     title: `${a.lead} ${subject} ${a.tail}`.replace(/\s+/g, " "),
+    approach: a.tag,
+    summary: `${a.concept} Built around ${subject} for ${seed.audience || "your audience"}.`,
     hook: `If you're a ${seed.audience || "creator"} working on ${subject}, stop — you're solving the wrong half of the problem.`,
     angle: `${a.tag} take on ${subject}, framed for ${seed.audience || "your audience"}.`,
     format: String(seed.format || "Short"),
@@ -136,7 +165,17 @@ export async function generateIdeas(seed: IdeaSeed): Promise<{ ideas: GeneratedI
     const notes = (seed.thoughts ?? "").trim();
     const raw = await deepseek(
       "You are a senior content strategist for short and long form creators. When the creator supplies their own raw notes, thoughts or opinions, treat them as the primary creative source: expand, organise and sharpen THEIR idea instead of inventing a different one. Reply with raw JSON only.",
-      `Generate 4 content ideas as a JSON array. Each object: {"title","hook","angle","format","why"}.
+      `Generate exactly 4 content ideas as a JSON array. Each object: {"title","approach","summary","hook","angle","format","why"}.
+
+CRITICAL: the 4 ideas must be four genuinely DIFFERENT creative directions on the same topic — not four rewordings of one concept. Pick the 4 most relevant approaches for this topic from: Story-driven, Educational, Contrarian, Experiment/Challenge, Tutorial, Opinion, Curiosity-driven, Case study, Listicle, Behind-the-scenes. Do not always use the same four.
+
+Field rules:
+- "approach": one or two words naming the chosen direction (e.g. "Contrarian").
+- "summary": one sentence (max 22 words) describing the concept of the piece.
+- "hook": the literal opening line the creator would say.
+- "angle": the framing/POV in one sentence.
+- "why": why this angle could work for this audience and platform, in one sentence.
+- "format": the content format.
 Niche: ${seed.niche}
 Topic: ${seed.topic}
 Platform: ${seed.platform}
