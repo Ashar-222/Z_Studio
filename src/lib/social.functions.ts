@@ -10,6 +10,7 @@ const schema = z.object({
 });
 
 export const importSocialFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => schema.parse(d))
   .handler(async ({ data }) => importSocialProfile(data));
 

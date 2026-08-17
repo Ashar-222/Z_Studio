@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import {
   generateIdeas,
   generatePack,
@@ -19,6 +20,7 @@ const ideaSchema = z.object({
 });
 
 export const ideasFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => ideaSchema.parse(d))
   .handler(async ({ data }) => generateIdeas(data));
 
@@ -36,6 +38,7 @@ const scriptSchema = z.object({
 });
 
 export const scriptFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => scriptSchema.parse(d))
   .handler(async ({ data }) => generateScript(data));
 
@@ -47,6 +50,7 @@ const sectionSchema = z.object({
 });
 
 export const sectionFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => sectionSchema.parse(d))
   .handler(async ({ data }) => reviseSection(data));
 
@@ -59,5 +63,6 @@ const packSchema = z.object({
 });
 
 export const packFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => packSchema.parse(d))
   .handler(async ({ data }) => generatePack(data));

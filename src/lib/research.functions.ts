@@ -1,12 +1,15 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { ideasFromSources, scrapeUrl, searchWeb } from "./research.server";
 
 export const scrapeFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ url: z.string().url() }).parse(d))
   .handler(async ({ data }) => scrapeUrl(data.url));
 
 export const searchFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) =>
     z.object({ query: z.string().min(2).max(200), limit: z.number().min(1).max(10).optional() }).parse(d),
   )
@@ -20,6 +23,7 @@ const sourceSchema = z.object({
 });
 
 export const researchIdeasFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) =>
     z
       .object({
