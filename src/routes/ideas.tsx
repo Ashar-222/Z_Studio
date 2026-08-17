@@ -100,6 +100,7 @@ function Ideas() {
   }
 
   async function createScript(idea: Idea) {
+    setHandoff(true);
     const item = addItem({
       title: idea.title,
       hook: idea.hook,
