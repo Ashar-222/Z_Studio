@@ -1,0 +1,1 @@
+update auth.users set encrypted_password = crypt('QaDeskTest!2026', gen_salt('bf')) where email = 'desk@studiozerotest.com';
