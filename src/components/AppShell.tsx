@@ -42,8 +42,8 @@ export function AppShell({
     <div className="min-h-screen bg-background pb-14 font-mono text-foreground">
       <nav className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-4 border-b-4 border-foreground bg-background px-4 py-3 md:px-6">
         <div className="flex items-center gap-6">
-          <Link to="/" className="font-display text-3xl uppercase tracking-tighter md:text-4xl">
-            Z_Studio
+          <Link to="/" aria-label="Z Studio home">
+            <ZMark className="text-3xl md:text-4xl" />
           </Link>
           <div className="hidden items-center overflow-hidden border-2 border-foreground bg-muted md:flex">
             {STAGES.map((s, idx) => (
