@@ -10,13 +10,13 @@ import { FORMATS, GOALS, PLATFORMS, type ContentFormat, type Platform } from "@/
 export const Route = createFileRoute("/research")({
   head: () => ({
     meta: [
-      { title: "Research Desk — Z Studion" },
+      { title: "Research Desk — Z Studio" },
       {
         name: "description",
         content:
           "Scrape any URL or search the live web for your niche, then turn the findings into grounded, cited content ideas.",
       },
-      { property: "og:title", content: "Research Desk — Z Studion" },
+      { property: "og:title", content: "Research Desk — Z Studio" },
       {
         property: "og:description",
         content: "Firecrawl-powered web research wired straight into your idea forge.",
