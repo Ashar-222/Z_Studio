@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Btn, Field, Input, Panel } from "@/components/brutal";
 import { PasswordInput } from "@/components/PasswordInput";
+import { ZMark } from "@/components/ZMark";
 import { supabase } from "@/integrations/supabase/client";
 import { useStore } from "@/lib/store";
 
@@ -64,7 +65,9 @@ function AuthPage() {
     <main className="grid min-h-screen place-items-center bg-background px-4 font-mono text-foreground">
       <Panel thick className="w-full max-w-md space-y-6 p-8">
         <div>
-          <h1 className="font-display text-5xl uppercase tracking-tighter">Z_Studio</h1>
+          <h1 className="text-5xl">
+            <ZMark className="text-5xl" />
+          </h1>
           <p className="mt-2 text-[10px] uppercase tracking-widest text-muted-foreground">
             {mode === "signin" ? "Sign in to your desk" : "Create your creator desk"}
           </p>
