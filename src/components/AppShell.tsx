@@ -2,6 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/lib/store";
+import { ZMark } from "@/components/ZMark";
 
 const STAGES = [
   { key: "PLAN", to: "/planner" },
