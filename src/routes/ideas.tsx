@@ -33,6 +33,8 @@ interface Idea {
   angle: string;
   format: string;
   why: string;
+  approach?: string;
+  summary?: string;
 }
 
 function Ideas() {
@@ -50,6 +52,8 @@ function Ideas() {
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<Idea[]>([]);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [handoff, setHandoff] = useState(false);
 
   const contextLine = [
     `${platform} ${format}`,
@@ -76,6 +80,7 @@ function Ideas() {
       });
       setMode(res.mode);
       setIdeas(res.ideas.map((i) => ({ ...i, key: uid() })));
+      setSelected(null);
     } finally {
       setLoading(false);
     }
