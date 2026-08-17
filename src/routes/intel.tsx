@@ -12,13 +12,13 @@ import { FORMATS, type ContentFormat, type Platform } from "@/lib/types";
 export const Route = createFileRoute("/intel")({
   head: () => ({
     meta: [
-      { title: "Creator Intel — Studio Zero" },
+      { title: "Creator Intel — Z Studion" },
       {
         name: "description",
         content:
           "Import your real social profile data, research the public web, and let AI turn both into evidence-backed content opportunities.",
       },
-      { property: "og:title", content: "Creator Intel — Studio Zero" },
+      { property: "og:title", content: "Creator Intel — Z Studion" },
       {
         property: "og:description",
         content: "Your own performance data plus live public research, turned into what to make next.",
