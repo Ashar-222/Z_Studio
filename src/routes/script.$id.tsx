@@ -4,7 +4,7 @@ import { AppShell } from "@/components/AppShell";
 import { Btn, Panel, StatusChip, Textarea } from "@/components/brutal";
 import { scriptFn, sectionFn } from "@/lib/ai.functions";
 import { uid, useStore } from "@/lib/store";
-import { STATUSES, type ScriptSection, type Status } from "@/lib/types";
+import { STATUSES, type ScriptSection } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/script/$id")({
