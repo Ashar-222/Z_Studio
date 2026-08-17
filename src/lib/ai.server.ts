@@ -148,7 +148,13 @@ export function templatePack(title: string, hook: string, platform: string, nich
     ],
     caption: `${hook}\n\nFull breakdown in this ${platform} post. Save it for later.`,
     description: `${title}\n\n${hook}\n\nIn this video:\n- The core idea\n- The step-by-step system\n- The mistake to avoid\n\nFollow for more.`,
-    hashtags: [slug || "creator", "creatortools", "contentstrategy", "behindthescenes", platform.toLowerCase().replace(/\s+/g, "")],
+    hashtags: [
+      slug || "creator",
+      "creatortools",
+      "contentstrategy",
+      "behindthescenes",
+      platform.toLowerCase().replace(/\s+/g, ""),
+    ],
     hooks: [
       hook,
       `Nobody warns you about this part of ${title.toLowerCase()}.`,
@@ -159,7 +165,9 @@ export function templatePack(title: string, hook: string, platform: string, nich
 
 /* ---------- public API used by the server functions ---------- */
 
-export async function generateIdeas(seed: IdeaSeed): Promise<{ ideas: GeneratedIdea[]; mode: string }> {
+export async function generateIdeas(
+  seed: IdeaSeed,
+): Promise<{ ideas: GeneratedIdea[]; mode: string }> {
   if (!hasKey()) return { ideas: templateIdeas(seed), mode: "TEMPLATE" };
   try {
     const notes = (seed.thoughts ?? "").trim();
@@ -245,7 +253,10 @@ export async function reviseSection(input: {
   if (!hasKey()) {
     const b = input.body.trim();
     const local: Record<string, string> = {
-      shorter: b.split(/(?<=[.!?])\s+/).slice(0, 1).join(" "),
+      shorter: b
+        .split(/(?<=[.!?])\s+/)
+        .slice(0, 1)
+        .join(" "),
       engaging: `${b.replace(/\.$/, "")} — and that's the part everyone skips.`,
       improve: b.replace(/\s+/g, " "),
       rewrite: `Another way to say it: ${b}`,
@@ -273,7 +284,10 @@ export async function generatePack(input: {
   script: string;
 }) {
   if (!hasKey())
-    return { pack: templatePack(input.title, input.hook, input.platform, input.niche), mode: "TEMPLATE" };
+    return {
+      pack: templatePack(input.title, input.hook, input.platform, input.niche),
+      mode: "TEMPLATE",
+    };
   try {
     const raw = await deepseek(
       "You package content for social platforms. Reply with raw JSON only.",
@@ -289,6 +303,9 @@ Script:\n${input.script.slice(0, 4000)}`,
     };
   } catch (e) {
     console.error("deepseek pack failed", e);
-    return { pack: templatePack(input.title, input.hook, input.platform, input.niche), mode: "TEMPLATE" };
+    return {
+      pack: templatePack(input.title, input.hook, input.platform, input.niche),
+      mode: "TEMPLATE",
+    };
   }
 }

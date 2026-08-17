@@ -64,12 +64,14 @@ export async function searchWeb(query: string, limit = 5): Promise<Source[]> {
     scrapeOptions: { formats: ["markdown"] },
   });
   const list = (Array.isArray(raw.data) ? raw.data : (raw.data as { web?: unknown[] })?.web) ?? [];
-  return (list as {
-    url?: string;
-    title?: string;
-    description?: string;
-    markdown?: string | undefined;
-  }[]).map((r) => ({
+  return (
+    list as {
+      url?: string;
+      title?: string;
+      description?: string;
+      markdown?: string | undefined;
+    }[]
+  ).map((r) => ({
     url: r.url ?? "",
     title: r.title ?? r.url ?? "Untitled",
     snippet: r.description ?? (r.markdown ?? "").slice(0, 300),

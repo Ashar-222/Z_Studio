@@ -1,18 +1,7 @@
-export type Platform =
-  | "YouTube"
-  | "YouTube Shorts"
-  | "Instagram"
-  | "Instagram Reels"
-  | "TikTok";
+export type Platform = "YouTube" | "YouTube Shorts" | "Instagram" | "Instagram Reels" | "TikTok";
 
 export type ContentFormat =
-  | "Long-form video"
-  | "Short"
-  | "Reel"
-  | "Carousel"
-  | "Tutorial"
-  | "Video essay"
-  | "Vlog";
+  "Long-form video" | "Short" | "Reel" | "Carousel" | "Tutorial" | "Video essay" | "Vlog";
 
 export type Status = "Idea" | "Draft" | "Ready" | "Published";
 

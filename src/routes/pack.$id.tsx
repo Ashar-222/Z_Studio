@@ -46,7 +46,10 @@ function Pack() {
       <AppShell stage="PACKAGE">
         <Panel thick className="p-10 text-center">
           <p className="font-display text-4xl uppercase">Content not found</p>
-          <Link to="/library" className="mt-4 inline-block border-2 border-foreground px-4 py-2 text-xs font-bold uppercase">
+          <Link
+            to="/library"
+            className="mt-4 inline-block border-2 border-foreground px-4 py-2 text-xs font-bold uppercase"
+          >
             Back to library
           </Link>
         </Panel>
@@ -100,7 +103,9 @@ function Pack() {
               {item.platform} // {item.format}
             </span>
           </div>
-          <h1 className="font-display text-4xl uppercase leading-none md:text-6xl">Package_Module</h1>
+          <h1 className="font-display text-4xl uppercase leading-none md:text-6xl">
+            Package_Module
+          </h1>
         </div>
         <div className="flex gap-2">
           <Link
@@ -143,7 +148,10 @@ function Pack() {
 
           <Panel className="space-y-4 p-5">
             <Field label="Headline">
-              <Input value={thumb.headline} onChange={(e) => setThumb({ headline: e.target.value })} />
+              <Input
+                value={thumb.headline}
+                onChange={(e) => setThumb({ headline: e.target.value })}
+              />
             </Field>
             <Field label="Kicker">
               <Input value={thumb.kicker} onChange={(e) => setThumb({ kicker: e.target.value })} />
@@ -159,7 +167,9 @@ function Pack() {
                       key={p.bg + p.fg}
                       onClick={() => setThumb(p)}
                       className="press size-8 border-2 border-foreground"
-                      style={{ background: `linear-gradient(135deg, ${p.bg} 60%, ${p.accent} 60%)` }}
+                      style={{
+                        background: `linear-gradient(135deg, ${p.bg} 60%, ${p.accent} 60%)`,
+                      }}
                       aria-label={`palette ${p.bg}`}
                     />
                   ))}
@@ -219,7 +229,8 @@ function Pack() {
               <div className="space-y-3">
                 <p className="font-display text-3xl uppercase">Nothing packaged yet</p>
                 <p className="text-xs uppercase tracking-widest text-muted-foreground">
-                  Generate titles, caption, description, hashtags and hook variations from your script
+                  Generate titles, caption, description, hashtags and hook variations from your
+                  script
                 </p>
               </div>
             </Panel>
@@ -242,7 +253,9 @@ function Pack() {
                             pack.selectedTitle === i && "bg-foreground",
                           )}
                         />
-                        <span className={cn("text-sm", pack.selectedTitle === i && "font-bold")}>{t}</span>
+                        <span className={cn("text-sm", pack.selectedTitle === i && "font-bold")}>
+                          {t}
+                        </span>
                       </button>
                     </li>
                   ))}
@@ -254,12 +267,17 @@ function Pack() {
                 <Textarea
                   value={pack.caption}
                   rows={4}
-                  onChange={(e) => updateItem(item.id, { pack: { ...pack, caption: e.target.value } })}
+                  onChange={(e) =>
+                    updateItem(item.id, { pack: { ...pack, caption: e.target.value } })
+                  }
                   className="border-secondary-foreground/40 bg-transparent text-sm text-secondary-foreground"
                 />
                 <div className="flex flex-wrap gap-2">
                   {pack.hashtags.map((h) => (
-                    <span key={h} className="bg-background px-1.5 py-0.5 text-[10px] font-bold uppercase text-foreground">
+                    <span
+                      key={h}
+                      className="bg-background px-1.5 py-0.5 text-[10px] font-bold uppercase text-foreground"
+                    >
                       #{h.replace(/^#/, "")}
                     </span>
                   ))}
@@ -285,7 +303,9 @@ function Pack() {
                 <Textarea
                   rows={6}
                   value={pack.description}
-                  onChange={(e) => updateItem(item.id, { pack: { ...pack, description: e.target.value } })}
+                  onChange={(e) =>
+                    updateItem(item.id, { pack: { ...pack, description: e.target.value } })
+                  }
                 />
               </Panel>
             </>

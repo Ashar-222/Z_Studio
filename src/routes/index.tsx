@@ -27,11 +27,29 @@ export const Route = createFileRoute("/")({
 
 function nextAction(items: ContentItem[]) {
   const drafting = items.find((i) => i.status === "Draft" && i.script);
-  if (drafting) return { item: drafting, verb: "Package it", to: "/pack/$id" as const, why: "Script drafted — turn it into titles, caption and a cover." };
+  if (drafting)
+    return {
+      item: drafting,
+      verb: "Package it",
+      to: "/pack/$id" as const,
+      why: "Script drafted — turn it into titles, caption and a cover.",
+    };
   const scriptless = items.find((i) => i.status === "Idea");
-  if (scriptless) return { item: scriptless, verb: "Write the script", to: "/script/$id" as const, why: "This idea is still sitting in the pipeline without a script." };
+  if (scriptless)
+    return {
+      item: scriptless,
+      verb: "Write the script",
+      to: "/script/$id" as const,
+      why: "This idea is still sitting in the pipeline without a script.",
+    };
   const unscheduled = items.find((i) => i.status === "Ready" && !i.publishDate);
-  if (unscheduled) return { item: unscheduled, verb: "Schedule it", to: "/pack/$id" as const, why: "Ready to go but no publish date yet." };
+  if (unscheduled)
+    return {
+      item: unscheduled,
+      verb: "Schedule it",
+      to: "/pack/$id" as const,
+      why: "Ready to go but no publish date yet.",
+    };
   return null;
 }
 

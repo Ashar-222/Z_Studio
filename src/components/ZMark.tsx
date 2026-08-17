@@ -4,13 +4,7 @@ import { cn } from "@/lib/utils";
 const TEXT = "Z_Studio";
 
 /** Animated Z Studio wordmark: first-view drop-in, hover jitter, click burst. */
-export function ZMark({
-  className,
-  onClick,
-}: {
-  className?: string;
-  onClick?: () => void;
-}) {
+export function ZMark({ className, onClick }: { className?: string; onClick?: () => void }) {
   const [intro, setIntro] = useState(false);
   const [burst, setBurst] = useState(0);
   const seen = useRef(false);
@@ -19,8 +13,7 @@ export function ZMark({
     if (seen.current) return;
     seen.current = true;
     const key = "zstudio-mark-seen";
-    const already =
-      typeof sessionStorage !== "undefined" && sessionStorage.getItem(key) === "1";
+    const already = typeof sessionStorage !== "undefined" && sessionStorage.getItem(key) === "1";
     setIntro(true);
     if (!already) {
       try {
@@ -48,10 +41,7 @@ export function ZMark({
       {TEXT.split("").map((ch, i) => (
         <span
           key={`${ch}-${i}`}
-          className={cn(
-            "zmark-letter transition-colors duration-150",
-            "hover:text-primary",
-          )}
+          className={cn("zmark-letter transition-colors duration-150", "hover:text-primary")}
           style={{ animationDelay: `${i * 60}ms` }}
         >
           {ch}

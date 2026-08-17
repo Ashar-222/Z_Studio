@@ -59,7 +59,10 @@ function Planner() {
       <SectionTitle
         right={
           <div className="flex gap-2">
-            <Btn variant={view === "calendar" ? "dark" : "default"} onClick={() => setView("calendar")}>
+            <Btn
+              variant={view === "calendar" ? "dark" : "default"}
+              onClick={() => setView("calendar")}
+            >
               Calendar
             </Btn>
             <Btn variant={view === "board" ? "dark" : "default"} onClick={() => setView("board")}>

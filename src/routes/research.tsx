@@ -333,7 +333,11 @@ function Research() {
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <Btn variant="primary" className="flex-1" onClick={() => void createScript(idea)}>
+                    <Btn
+                      variant="primary"
+                      className="flex-1"
+                      onClick={() => void createScript(idea)}
+                    >
                       Create script
                     </Btn>
                     <Btn onClick={() => save(idea)}>Save</Btn>

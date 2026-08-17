@@ -137,11 +137,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
     const { data: sub } = supabase.auth.onAuthStateChange(
       (event: AuthChangeEvent, session: Session | null) => {
-      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
-      setUserId(session?.user.id ?? null);
-      setEmail(session?.user.email ?? null);
-      setReady(false);
-      void load(session?.user.id ?? null);
+        if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+        setUserId(session?.user.id ?? null);
+        setEmail(session?.user.email ?? null);
+        setReady(false);
+        void load(session?.user.id ?? null);
       },
     );
 
@@ -228,10 +228,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setState(emptyState);
   }, []);
 
-  const getItem = useCallback(
-    (id: string) => state.items.find((i) => i.id === id),
-    [state.items],
-  );
+  const getItem = useCallback((id: string) => state.items.find((i) => i.id === id), [state.items]);
 
   const reset = useCallback(() => setState(emptyState), []);
 

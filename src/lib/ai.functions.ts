@@ -1,12 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import {
-  generateIdeas,
-  generatePack,
-  generateScript,
-  reviseSection,
-} from "./ai.server";
+import { generateIdeas, generatePack, generateScript, reviseSection } from "./ai.server";
 
 const ideaSchema = z.object({
   niche: z.string(),

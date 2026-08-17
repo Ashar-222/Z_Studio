@@ -4,7 +4,7 @@ import { AppShell } from "@/components/AppShell";
 import { Btn, Panel, StatusChip, Textarea } from "@/components/brutal";
 import { scriptFn, sectionFn } from "@/lib/ai.functions";
 import { uid, useStore } from "@/lib/store";
-import { STATUSES, type ScriptSection, type Status } from "@/lib/types";
+import { STATUSES, type ScriptSection } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/script/$id")({
@@ -42,14 +42,22 @@ function ScriptStudio() {
   const [busy, setBusy] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  if (!ready) return <AppShell stage="CREATE"><div className="p-10" /></AppShell>;
+  if (!ready)
+    return (
+      <AppShell stage="CREATE">
+        <div className="p-10" />
+      </AppShell>
+    );
 
   if (!item) {
     return (
       <AppShell stage="CREATE">
         <Panel thick className="p-10 text-center">
           <p className="font-display text-4xl uppercase">Content not found</p>
-          <Link to="/library" className="mt-4 inline-block border-2 border-foreground px-4 py-2 text-xs font-bold uppercase">
+          <Link
+            to="/library"
+            className="mt-4 inline-block border-2 border-foreground px-4 py-2 text-xs font-bold uppercase"
+          >
             Back to library
           </Link>
         </Panel>
@@ -76,7 +84,10 @@ function ScriptStudio() {
           goal: state.profile?.goal ?? "",
         },
       });
-      updateItem(item.id, { script: res.sections.map((s) => ({ ...s, id: uid() })), status: "Draft" });
+      updateItem(item.id, {
+        script: res.sections.map((s) => ({ ...s, id: uid() })),
+        status: "Draft",
+      });
     } finally {
       setBusy(null);
     }
@@ -147,7 +158,12 @@ function ScriptStudio() {
               <p className="text-xs uppercase tracking-widest text-muted-foreground">
                 Build a structured draft from this idea
               </p>
-              <Btn variant="primary" className="px-8 py-3" onClick={() => void buildScript()} disabled={busy === "all"}>
+              <Btn
+                variant="primary"
+                className="px-8 py-3"
+                onClick={() => void buildScript()}
+                disabled={busy === "all"}
+              >
                 {busy === "all" ? "Writing…" : "Generate script"}
               </Btn>
             </Panel>
@@ -197,7 +213,11 @@ function ScriptStudio() {
               <span>→</span>
               <span className="bg-primary px-2 py-1">Script</span>
               <span>→</span>
-              <Link to="/pack/$id" params={{ id: item.id }} className="border-2 border-foreground px-2 py-1 hover:bg-primary">
+              <Link
+                to="/pack/$id"
+                params={{ id: item.id }}
+                className="border-2 border-foreground px-2 py-1 hover:bg-primary"
+              >
                 Pack
               </Link>
             </div>
@@ -231,8 +251,9 @@ function ScriptStudio() {
               </Btn>
             </div>
             <div className="border-t-2 border-dashed border-foreground pt-3 text-[10px] uppercase text-muted-foreground">
-              {sections.length} sections // {scriptText.split(/\s+/).filter(Boolean).length} words //
-              ~{Math.max(1, Math.round(scriptText.split(/\s+/).filter(Boolean).length / 140))} min
+              {sections.length} sections // {scriptText.split(/\s+/).filter(Boolean).length} words
+              // ~{Math.max(1, Math.round(scriptText.split(/\s+/).filter(Boolean).length / 140))}{" "}
+              min
             </div>
           </Panel>
 
