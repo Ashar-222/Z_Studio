@@ -134,6 +134,14 @@ function Welcome() {
 
   const canNext = step === 0 ? name.trim() && niche.trim() : platforms.length > 0;
 
+  const contextLine = [
+    platforms[0] ? `${platforms[0]} ${contentType}` : social?.label,
+    niche.trim(),
+    audience.trim(),
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
   function finish() {
     setProfile({ name, niche, platforms, audience, contentType, frequency, goal });
     navigate({ to: "/" });
