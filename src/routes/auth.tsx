@@ -8,13 +8,13 @@ import { useStore } from "@/lib/store";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — Studio Zero" },
+      { title: "Sign in — Z Studion" },
       {
         name: "description",
         content:
-          "Sign in to Studio Zero to sync your creator profile, ideas, scripts and content calendar across devices.",
+          "Sign in to Z Studion to sync your creator profile, ideas, scripts and content calendar across devices.",
       },
-      { property: "og:title", content: "Sign in — Studio Zero" },
+      { property: "og:title", content: "Sign in — Z Studion" },
       {
         property: "og:description",
         content: "Access your creator content pipeline: ideas, scripts, packaging and planning.",
@@ -64,7 +64,7 @@ function AuthPage() {
     <main className="grid min-h-screen place-items-center bg-background px-4 font-mono text-foreground">
       <Panel thick className="w-full max-w-md space-y-6 p-8">
         <div>
-          <h1 className="font-display text-5xl uppercase tracking-tighter">Studio_Zero</h1>
+          <h1 className="font-display text-5xl uppercase tracking-tighter">Z_Studion</h1>
           <p className="mt-2 text-[10px] uppercase tracking-widest text-muted-foreground">
             {mode === "signin" ? "Sign in to your desk" : "Create your creator desk"}
           </p>
