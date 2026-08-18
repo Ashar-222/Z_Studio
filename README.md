@@ -93,4 +93,4 @@ Z Studio was built as an MVP for the HORIZON Creator Tools challenge within a 48
 
 ## Demo
 
-**Live demo:** _[URL will be added here before final submission]_
+**Live demo:** _https://zstudioashar.lovable.app/auth_
