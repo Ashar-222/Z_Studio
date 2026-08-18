@@ -4,6 +4,7 @@ import { Btn, Field, Input, Panel } from "@/components/brutal";
 import { PasswordInput } from "@/components/PasswordInput";
 import { ZMark } from "@/components/ZMark";
 import { supabase } from "@/integrations/supabase/client";
+import { checkPasswordSafety } from "@/lib/password.functions";
 import { useStore } from "@/lib/store";
 
 export const Route = createFileRoute("/auth")({
@@ -45,6 +46,13 @@ function AuthPage() {
     setBusy(true);
     setMsg(null);
     try {
+      if (mode === "signup") {
+        const check = await checkPasswordSafety({ data: { password } });
+        if (!check.ok) {
+          setMsg(check.reason);
+          return;
+        }
+      }
       const res =
         mode === "signin"
           ? await supabase.auth.signInWithPassword({ email, password })
