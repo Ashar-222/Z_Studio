@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { importSocialProfile } from "./social.server";
+import type { SocialProfile } from "./social.server";
 
 const schema = z.object({
   platform: z.enum(["youtube", "instagram", "tiktok"]),
@@ -9,72 +9,27 @@ const schema = z.object({
   kind: z.enum(["videos", "shorts"]).optional(),
 });
 
+/**
+ * SocialFetch profile importing is a paid capability and is currently closed.
+ * Both entry points refuse the request and steer the creator to the waitlist.
+ */
 export const importSocialFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => schema.parse(d))
-  .handler(async ({ data }) => importSocialProfile(data));
+  .handler(async (): Promise<SocialProfile> => {
+    const { WAITLIST_ERROR } = await import("./credits.server");
+    throw new Error(WAITLIST_ERROR);
+  });
 
-/** Fetch from SocialFetch, then persist the normalized result for the signed-in creator. */
 export const syncSocialFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => schema.parse(d))
-  .handler(async ({ data, context }) => {
-    const { supabase, userId } = context;
-    const profile = await importSocialProfile(data);
-
-    const { data: accountRow, error: accErr } = await supabase
-      .from("social_accounts")
-      .upsert(
-        {
-          user_id: userId,
-          platform: profile.platform,
-          handle: profile.handle,
-          display_name: profile.displayName,
-          bio: profile.bio,
-          avatar_url: profile.avatarUrl ?? null,
-          profile_url: profile.profileUrl ?? null,
-          verified: profile.verified,
-          followers: profile.metrics.followers ?? null,
-          posts_count: profile.metrics.posts ?? null,
-          total_views: profile.metrics.views ?? null,
-          raw: { suggested: profile.suggested },
-          last_synced_at: new Date().toISOString(),
-        },
-        { onConflict: "user_id,platform,handle" },
-      )
-      .select()
-      .single();
-    if (accErr || !accountRow)
-      throw new Error(`Could not save profile: ${accErr?.message ?? "unknown error"}`);
-
-    const posts = profile.topPosts.filter((p) => p.externalId);
-    if (posts.length > 0) {
-      const { error: postErr } = await supabase.from("social_posts").upsert(
-        posts.map((p) => ({
-          user_id: userId,
-          account_id: accountRow.id,
-          external_id: p.externalId,
-          title: p.title,
-          url: p.url ?? null,
-          thumbnail_url: p.thumbnailUrl ?? null,
-          published_at: p.publishedAt ?? null,
-          views: p.views ?? null,
-          likes: p.likes ?? null,
-          comments: p.comments ?? null,
-          shares: p.shares ?? null,
-          duration_seconds: p.durationSeconds ?? null,
-        })),
-        { onConflict: "account_id,external_id" },
-      );
-      if (postErr) throw new Error(`Could not save posts: ${postErr.message}`);
-    }
-
-    return {
-      profile,
-      accountId: accountRow.id as string,
-      lastSyncedAt: accountRow.last_synced_at as string,
-    };
-  });
+  .handler(
+    async (): Promise<{ profile: SocialProfile; accountId: string; lastSyncedAt: string }> => {
+      const { WAITLIST_ERROR } = await import("./credits.server");
+      throw new Error(WAITLIST_ERROR);
+    },
+  );
 
 export interface StoredAccount {
   id: string;

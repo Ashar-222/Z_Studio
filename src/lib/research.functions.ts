@@ -6,7 +6,11 @@ import { ideasFromSources, scrapeUrl, searchWeb } from "./research.server";
 export const scrapeFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ url: z.string().url() }).parse(d))
-  .handler(async ({ data }) => scrapeUrl(data.url));
+  .handler(async ({ data, context }) => {
+    const { spendResearchCredit } = await import("./credits.server");
+    const remaining = await spendResearchCredit(context.userId);
+    return { ...(await scrapeUrl(data.url)), creditsRemaining: remaining };
+  });
 
 export const searchFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -15,7 +19,14 @@ export const searchFn = createServerFn({ method: "POST" })
       .object({ query: z.string().min(2).max(200), limit: z.number().min(1).max(10).optional() })
       .parse(d),
   )
-  .handler(async ({ data }) => ({ sources: await searchWeb(data.query, data.limit ?? 5) }));
+  .handler(async ({ data, context }) => {
+    const { spendResearchCredit } = await import("./credits.server");
+    const remaining = await spendResearchCredit(context.userId);
+    return {
+      sources: await searchWeb(data.query, data.limit ?? 5),
+      creditsRemaining: remaining,
+    };
+  });
 
 const sourceSchema = z.object({
   url: z.string(),

@@ -4,6 +4,7 @@ import { AppShell } from "@/components/AppShell";
 import { Btn, Field, Input, Panel, SectionTitle, Select, Tag } from "@/components/brutal";
 import { scriptFn } from "@/lib/ai.functions";
 import { researchIdeasFn, scrapeFn, searchFn } from "@/lib/research.functions";
+import { CreditsBadge, WaitlistCard, isWaitlistError, useCredits } from "@/components/Waitlist";
 import { useStore, uid } from "@/lib/store";
 import { FORMATS, GOALS, PLATFORMS, type ContentFormat, type Platform } from "@/lib/types";
 
@@ -62,6 +63,8 @@ function Research() {
   const [mode, setMode] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [locked, setLocked] = useState(false);
+  const { credits, refresh } = useCredits();
 
   function toggle(u: string) {
     setPicked((p) => (p.includes(u) ? p.filter((x) => x !== u) : [...p, u]));
@@ -81,8 +84,13 @@ function Research() {
         setSources(res.sources);
         setPicked(res.sources.slice(0, 3).map((s) => s.url));
       }
+      void refresh();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Research failed");
+      if (isWaitlistError(e)) {
+        setLocked(true);
+      } else {
+        setError(e instanceof Error ? e.message : "Research failed");
+      }
     } finally {
       setBusy(null);
     }
@@ -174,6 +182,17 @@ function Research() {
 
       <div className="grid gap-8 lg:grid-cols-12">
         <Panel thick className="animate-slide-up space-y-4 p-6 lg:col-span-4">
+          {credits && (
+            <CreditsBadge
+              remaining={credits.researchRemaining}
+              total={credits.researchCredits}
+            />
+          )}
+          <p className="text-[10px] uppercase leading-relaxed text-muted-foreground">
+            Scripts and idea development are free. Each web crawl or search spends one research
+            credit.
+          </p>
+
           <div className="flex overflow-hidden border-2 border-foreground">
             {(["URL", "SEARCH"] as const).map((t) => (
               <button
@@ -247,6 +266,16 @@ function Research() {
             >
               {busy === "ideas" ? "Forging…" : `Forge ideas from ${picked.length} source(s)`}
             </Btn>
+          )}
+
+          {(locked || credits?.researchRemaining === 0) && (
+            <WaitlistCard
+              feature="web-research"
+              title="Out of research credits"
+              reason="You have used your 2 free Firecrawl research runs. Join the waitlist to get more credits when paid research opens up."
+              joined={credits?.waitlist.includes("web-research") ?? false}
+              onJoined={() => void refresh()}
+            />
           )}
 
           {error && (
