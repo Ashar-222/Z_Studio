@@ -12,13 +12,20 @@ const schema = z.object({
 export const importSocialFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => schema.parse(d))
-  .handler(async ({ data }) => importSocialProfile(data));
+  .handler(async () => {
+    const { WAITLIST_ERROR } = await import("./credits.server");
+    throw new Error(WAITLIST_ERROR);
+  });
 
 /** Fetch from SocialFetch, then persist the normalized result for the signed-in creator. */
 export const syncSocialFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => schema.parse(d))
   .handler(async ({ data, context }) => {
+    const { WAITLIST_ERROR } = await import("./credits.server");
+    throw new Error(WAITLIST_ERROR);
+
+    /* eslint-disable no-unreachable */
     const { supabase, userId } = context;
     const profile = await importSocialProfile(data);
 
