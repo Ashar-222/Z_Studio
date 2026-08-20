@@ -11,6 +11,7 @@ import {
   type StoredAccount,
   type StoredPost,
 } from "@/lib/social.functions";
+import { CreditsBadge, WaitlistCard, isWaitlistError, useCredits } from "@/components/Waitlist";
 import { useStore, uid } from "@/lib/store";
 import { FORMATS, type ContentFormat, type Platform } from "@/lib/types";
 
@@ -97,6 +98,7 @@ function Intel() {
   const [activeAccount, setActiveAccount] = useState<string | null>(null);
   const [syncing, setSyncing] = useState(false);
   const [socialError, setSocialError] = useState<string | null>(null);
+  const [socialLocked, setSocialLocked] = useState(false);
 
   // --- Firecrawl state ---
   const [mode, setMode] = useState<"TOPIC" | "URL">("TOPIC");
@@ -105,6 +107,8 @@ function Intel() {
   const [sources, setSources] = useState<Source[]>([]);
   const [researching, setResearching] = useState(false);
   const [researchError, setResearchError] = useState<string | null>(null);
+  const [researchLocked, setResearchLocked] = useState(false);
+  const { credits, refresh: refreshCredits } = useCredits();
 
   // --- AI state ---
   const [opps, setOpps] = useState<Opportunity[]>([]);
@@ -143,7 +147,12 @@ function Intel() {
       setActiveAccount(res.accountId);
       setHandle("");
     } catch (e) {
-      setSocialError(friendly(e));
+      if (isWaitlistError(e)) {
+        setSocialLocked(true);
+        setSocialError(null);
+      } else {
+        setSocialError(friendly(e));
+      }
     } finally {
       setSyncing(false);
     }
@@ -165,9 +174,15 @@ function Intel() {
         }
         setSources(res.sources.map((s) => ({ url: s.url, title: s.title, snippet: s.snippet })));
       }
+      void refreshCredits();
     } catch (e) {
       setSources([]);
-      setResearchError(friendly(e));
+      if (isWaitlistError(e)) {
+        setResearchLocked(true);
+        setResearchError(null);
+      } else {
+        setResearchError(friendly(e));
+      }
     } finally {
       setResearching(false);
     }
