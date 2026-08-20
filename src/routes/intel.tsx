@@ -316,6 +316,16 @@ function Intel() {
             {syncing ? "Fetching profile…" : "Connect & fetch profile"}
           </Btn>
 
+          {(socialLocked || credits?.waitlist.includes("social-fetch")) && (
+            <WaitlistCard
+              feature="social-fetch"
+              title="Profile fetching is invite-only"
+              reason="Importing real social profile data is a paid capability that is not open yet. Join the waitlist and we'll unlock it for your account as soon as it ships."
+              joined={credits?.waitlist.includes("social-fetch") ?? false}
+              onJoined={() => void refreshCredits()}
+            />
+          )}
+
           {socialError && (
             <div className="space-y-2 border-2 border-destructive bg-destructive/10 p-3">
               <p className="text-[10px] font-bold uppercase tracking-widest">Connection failed</p>
@@ -524,6 +534,20 @@ function Intel() {
           >
             {researching ? "Researching…" : "Run research"}
           </Btn>
+
+          {credits && (
+            <CreditsBadge remaining={credits.researchRemaining} total={credits.researchCredits} />
+          )}
+
+          {(researchLocked || credits?.researchRemaining === 0) && (
+            <WaitlistCard
+              feature="web-research"
+              title="Out of research credits"
+              reason="You have used your 2 free Firecrawl research runs. Join the waitlist to get more credits."
+              joined={credits?.waitlist.includes("web-research") ?? false}
+              onJoined={() => void refreshCredits()}
+            />
+          )}
 
           {researchError && (
             <div className="space-y-2 border-2 border-destructive bg-destructive/10 p-3">

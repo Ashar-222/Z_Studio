@@ -5,6 +5,7 @@ import { Loader2, Sparkles } from "lucide-react";
 import { Btn, Field, Input, Panel, Select } from "@/components/brutal";
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { WaitlistCard, isWaitlistError } from "@/components/Waitlist";
 import { importSocialFn } from "@/lib/social.functions";
 import type { SocialProfile, SocialPlatform } from "@/lib/social.server";
 import {
@@ -108,6 +109,7 @@ function Welcome() {
   const [importing, setImporting] = useState(false);
   const [importError, setImportError] = useState<string | null>(null);
   const [imported, setImported] = useState<SocialProfile | null>(null);
+  const [socialLocked, setSocialLocked] = useState(false);
   const runImport = useServerFn(importSocialFn);
 
   async function doImport() {
@@ -126,7 +128,12 @@ function Welcome() {
       const match = social.platform;
       setPlatforms((prev) => (prev.includes(match) ? prev : [...prev, match]));
     } catch (e) {
-      setImportError(e instanceof Error ? e.message : "Import failed");
+      if (isWaitlistError(e)) {
+        setSocialLocked(true);
+        setImportError(null);
+      } else {
+        setImportError(e instanceof Error ? e.message : "Import failed");
+      }
     } finally {
       setImporting(false);
     }
@@ -320,6 +327,15 @@ function Welcome() {
                       One platform at a time — you can connect another later.
                     </p>
                   </>
+                )}
+                {socialLocked && (
+                  <div className="mt-3">
+                    <WaitlistCard
+                      feature="social-fetch"
+                      title="Profile import is invite-only"
+                      reason="Auto-importing your social profile is a paid capability that isn't open yet. Join the waitlist, and meanwhile just fill in your details below — everything else in Z Studio works."
+                    />
+                  </div>
                 )}
                 {importError && (
                   <p className="mt-2 text-[10px] font-bold uppercase text-destructive">
